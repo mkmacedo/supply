@@ -31,6 +31,47 @@ df_forecast = pd.read_excel(sheets[4].strip())
 df_colocado = pd.read_excel(sheets[5].strip())
 df_biotech = pd.read_excel(sheets[6].strip())
 
+material = df_estoque_all['Material No']
+material = material.unique()
+
+d = {}
+
+for f in material:
+    temp_df = pd.DataFrame()
+    d[f] = {}
+    
+    for i in range(len(df_estoque_all)):
+        if str(df_estoque_all.loc[i, 'Material No']) == f:
+            d[f]['Batch'] = str(df_estoque_all.loc[i, 'Batch'])
+            d[f]['Stock'] = str(df_estoque_all.loc[i, 'Stock'])
+            d[f]['Plant'] = str(df_estoque_all.loc[i, 'Plant'])
+            d[f]['Batch status key']  = str(df_estoque_all.loc[i, 'Batch status key'])
+            d[f]['Expiration date'] = str(df_estoque_all.loc[i, 'Expiration date'])
 
 
-print(df_biotech.head())
+    for i in range(len(df_vendas)):
+        for key in list(d.keys()):
+
+            if df_vendas.loc[i, 'Material'] == key:
+
+                if df_vendas.loc[i, 'Batch'] == d[key]['Batch']:
+                    d[key]['Quantity'] = str(df_vendas.loc[i, 'Quantity'])
+
+print(d)
+
+
+
+
+
+#    if str(f) == str(df_vendas.loc[i, 'Material']):
+#        codigo_material = [(df_vendas.loc[i, 'Material'], df_vendas.loc[i, 'Material description'], df_vendas.loc[i, 'Quantity']) for i in range(len(df_vendas[['Material']]))]
+#
+#prod = {}
+#for t in codigo_material:
+#    t
+
+
+#print(codigo_material)
+
+
+#print(df_biotech.head())
