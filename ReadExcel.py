@@ -42,7 +42,7 @@ class Medicamentos:
 
         self.d = {}
 
-    def calcular(self):
+    def calcular(self, month):
 
         material = self.df_estoque_all['Material No']
         material = material.unique()
@@ -103,15 +103,25 @@ class Medicamentos:
                     self.d[f]['Batch'][str(self.df_estoque_all.loc[i, 'Batch'])]['Limit sales date'] = (limit, limit.strftime('%Y-%m-%d'))
 
         tables = {}
-        cols = self.df_forecast.columns
-        col_input = 'JAN 2021'
+        cols = list(self.df_forecast.columns)
+        
+        #print(cols[cols.index(month):])
         for key in list(self.d.keys()):
-            tables[key] = {}
+            #tables[key] = {}
         
             for i in range(len(self.df_forecast)):
                 if self.df_forecast.loc[i, 'Product Code'] == key:
-                    #print(self.df_forecast.loc[i, col_input])
-                    tables[key]['col_input'] = self.df_forecast.loc[i, col_input]
+#                    #print(self.df_forecast.loc[i, col_input])
+#                    tables[key]['forecast'][month] = self.df_forecast.loc[i, month]
+#                    tables[key]['forecast'][month] = self.df_forecast.loc[[key], month]
+#
+#                    break
+
+            #print(self.df_forecast.loc[i, col_input])
+                    tables[key] = self.df_forecast.loc[i, cols[cols.index(month):]]
+
+        print()
+        print(tables)
 
 
 
@@ -125,10 +135,10 @@ class Medicamentos:
         #print(math.isnan(x[-1]))
         #print(math.isnan(x[-1]))
         #print(x[-1].isnan())
-        print(self.d)
+        #print(self.d)
 
 x = Medicamentos(sheets)
-x.calcular()
+x.calcular('JAN 2021')
 
 
 #print(codigo_material)
