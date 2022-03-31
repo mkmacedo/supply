@@ -1,10 +1,11 @@
 from cmath import nan
 from datetime import date, datetime, timedelta
 import math
+from xml.dom import NAMESPACE_ERR
 import pandas as pd
 import regexes
 import sys
-
+import numpy as np
 
 #pln1 = sys.argv[1]
 #pln2 = sys.argv[2]
@@ -110,10 +111,15 @@ class Medicamentos:
         #Planilha Forecast
         forecast = {}
         coberturaInicial = {}
+        coberturaFinal = {}
+        coberturaFinal_dict = {}
+        np_arr = np.random.rand(1,5)
+        #print("NPARR",np_arr)
         cols = list(self.df_forecast.columns)
         
         for key in list(self.d.keys()):
             forecast[key] = {}
+            
         
             for i in range(len(self.df_forecast)):
                 if self.df_forecast.loc[i, 'Product Code'] == key:
@@ -145,7 +151,25 @@ class Medicamentos:
                         #print(temp_df[cols[j:lim]])#.values)
                         #print(cols)
                         #forecast[key]= self.df_forecast.loc[i, cols[j:lim]]
-                        forecast[key]= temp_df[cols[j:lim]]
+                        forecast[key] = temp_df[cols[j:lim]]
+                        print(forecast[key].index)
+                        indexes = list(forecast[key].index)
+
+                        for idx in range (len(indexes)):
+                            coberturaFinal_dict[key] = forecast[key][indexes[idx]]/np_arr[0][idx]
+                            print(coberturaFinal_dict[key])
+                        
+#                        k = 0
+#                        for i in range(len(cols)):
+#                            if i == j and i < lim:
+#                                coberturaFinal_dict[cols[i]] = forecast[key][k]
+#                                k += 1
+#
+#                        print(coberturaFinal_dict)
+
+
+                        #coberturaFinal[key] = 
+
                         cInicial = []
                         for v in forecast[key]:
                             if len(cInicial) == 0:
@@ -165,8 +189,8 @@ class Medicamentos:
         #print(forecast)
         #print(forecast['F1231201']['JAN 2021'])
 
-        for i in forecast['F1231201']:
-            print(i)
+        #for i in forecast['F1231201']:
+        #    print(i)
 
         #Estoque Inicial
 
