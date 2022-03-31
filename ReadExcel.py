@@ -100,8 +100,8 @@ class Medicamentos:
 
                     #days (timedelta)
                     delta = str(date.today() - self.d[f]['Batch'][str(self.df_estoque_all.loc[i, 'Batch'])]['Shelf life'][0].date())
-                    self.d[f]['Batch'][str(self.df_estoque_all.loc[i, 'Batch'])]['Days'] = eval(delta[:delta.find(' days')]) if delta.find(' days') != -1 else eval(delta[:delta.find(' day')])
-                    self.d[f]['Batch'][str(self.df_estoque_all.loc[i, 'Batch'])]['Month'] = float('{:.1f}'.format(eval(delta[:delta.find(' days')])/30)) if delta.find(' days') != -1 else float('{:.1f}'.format(eval(delta[:delta.find(' day')])/30))
+                    self.d[f]['Batch'][str(self.df_estoque_all.loc[i, 'Batch'])]['Days'] = eval(delta[:delta.find(' days')]) if delta.find(' days') != -1 else eval(delta[:delta.find(' day')]) if delta.find(' day') != -1 else 0
+                    self.d[f]['Batch'][str(self.df_estoque_all.loc[i, 'Batch'])]['Month'] = float('{:.1f}'.format(eval(delta[:delta.find(' days')])/30)) if delta.find(' days') != -1 else float('{:.1f}'.format(eval(delta[:delta.find(' day')])/30)) if delta.find(' day') != -1 else 0
 
                     limit = self.d[f]['Batch'][str(self.df_estoque_all.loc[i, 'Batch'])]['Shelf life'][0].date() - timedelta(days=30*12)
                     self.d[f]['Batch'][str(self.df_estoque_all.loc[i, 'Batch'])]['Limit sales date'] = (limit, limit.strftime('%Y-%m-%d'))
@@ -145,15 +145,14 @@ class Medicamentos:
                         #print(temp_df[cols[j:lim]])#.values)
                         #print(cols)
                         #forecast[key]= self.df_forecast.loc[i, cols[j:lim]]
-                        
                         forecast[key]= temp_df[cols[j:lim]]
-#                        cInicial = []
-#                        for v in forecast[key]:
-#                            if len(cInicial) == 0:
-#                                cInicial.append(100*estoque_inicial/v)
-#                            else:
-#                                cInicial.append(100*cInicial[-1]/v)
-#                        print(cInicial)
+                        cInicial = []
+                        for v in forecast[key]:
+                            if len(cInicial) == 0:
+                                cInicial.append(estoque_inicial/v)
+                            else:
+                                cInicial.append(cInicial[-1]/v)
+                        print(cInicial)
 
             
             #print(forecast[key])
