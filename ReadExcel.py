@@ -42,10 +42,12 @@ class Medicamentos:
 
         self.d = {}
 
-    def calcular(self, month):
+    def calcular(self, month, estoque_inicial=None):
 
         material = self.df_estoque_all['Material No']
         material = material.unique()
+
+        test = {}
         
         for f in material:
 
@@ -77,6 +79,8 @@ class Medicamentos:
 
                 if str(self.df_estoque_all.loc[i, 'Material No']) == f:
 
+                    #test[str(self.df_estoque_all.loc[i, 'Material No'])] = self.df_estoque_all.loc[i]
+
                     if self.d[f].get("Description") == None:
                         self.d[f]['Description'] = self.df_estoque_all.loc[i, 'Material Description']
 
@@ -96,21 +100,25 @@ class Medicamentos:
 
                     #days (timedelta)
                     delta = str(date.today() - self.d[f]['Batch'][str(self.df_estoque_all.loc[i, 'Batch'])]['Shelf life'][0].date())
-                    self.d[f]['Batch'][str(self.df_estoque_all.loc[i, 'Batch'])]['Days'] = eval(delta[:delta.find(' days')])
-                    self.d[f]['Batch'][str(self.df_estoque_all.loc[i, 'Batch'])]['Month'] = float('{:.1f}'.format(eval(delta[:delta.find(' days')])/30))
+                    self.d[f]['Batch'][str(self.df_estoque_all.loc[i, 'Batch'])]['Days'] = eval(delta[:delta.find(' days')]) if delta.find(' days') != -1 else eval(delta[:delta.find(' day')])
+                    self.d[f]['Batch'][str(self.df_estoque_all.loc[i, 'Batch'])]['Month'] = float('{:.1f}'.format(eval(delta[:delta.find(' days')])/30)) if delta.find(' days') != -1 else float('{:.1f}'.format(eval(delta[:delta.find(' day')])/30))
 
                     limit = self.d[f]['Batch'][str(self.df_estoque_all.loc[i, 'Batch'])]['Shelf life'][0].date() - timedelta(days=30*12)
                     self.d[f]['Batch'][str(self.df_estoque_all.loc[i, 'Batch'])]['Limit sales date'] = (limit, limit.strftime('%Y-%m-%d'))
 
-        tables = {}
+
+        #Planilha Forecast
+        forecast = {}
+        coberturaInicial = {}
         cols = list(self.df_forecast.columns)
         
-        #print(cols[cols.index(month):])
         for key in list(self.d.keys()):
-            #tables[key] = {}
+            forecast[key] = {}
         
             for i in range(len(self.df_forecast)):
                 if self.df_forecast.loc[i, 'Product Code'] == key:
+                    temp_df = self.df_forecast.loc[i]
+                    #print(temp_df)
 #                    #print(self.df_forecast.loc[i, col_input])
 #                    tables[key]['forecast'][month] = self.df_forecast.loc[i, month]
 #                    tables[key]['forecast'][month] = self.df_forecast.loc[[key], month]
@@ -118,15 +126,55 @@ class Medicamentos:
 #                    break
 
             #print(self.df_forecast.loc[i, col_input])
-                    tables[key] = self.df_forecast.loc[i, cols[cols.index(month):]]
+                    monthFlag = False
+                    numCols = len(cols)
+                    lim = 0
+                    j = 0
+                    for j in range(numCols):
+                        if cols[j] == month and monthFlag == False:
+                            monthFlag = True
+                            if j + 5 <= numCols:
+                                lim = j + 5
+                            else:
+                                lim = numCols
+                            break
+
+                    if monthFlag == True and j < lim:
+                        #forecast[key][cols[j]] = self.df_forecast.loc[i, cols[j]]
+                        #temp_df = self.df_forecast.loc[i]
+                        #print(temp_df[cols[j:lim]])#.values)
+                        #print(cols)
+                        #forecast[key]= self.df_forecast.loc[i, cols[j:lim]]
+                        
+                        forecast[key]= temp_df[cols[j:lim]]
+#                        cInicial = []
+#                        for v in forecast[key]:
+#                            if len(cInicial) == 0:
+#                                cInicial.append(100*estoque_inicial/v)
+#                            else:
+#                                cInicial.append(100*cInicial[-1]/v)
+#                        print(cInicial)
+
+            
+            #print(forecast[key])
 
         print()
-        print(tables)
+#        for key in list(test.keys()):
+#            print(test[key][['Batch', 'Plant']])#.values)
+#            print()
+        #print(test)
+        #print(forecast)
+        #print(forecast['F1231201']['JAN 2021'])
+
+        for i in forecast['F1231201']:
+            print(i)
+
+        #Estoque Inicial
 
 
 
 
-                    
+
 
 
 
@@ -138,7 +186,7 @@ class Medicamentos:
         #print(self.d)
 
 x = Medicamentos(sheets)
-x.calcular('JAN 2021')
+x.calcular('JAN 2021', 39)
 
 
 #print(codigo_material)
