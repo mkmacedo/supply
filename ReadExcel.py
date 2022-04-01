@@ -113,13 +113,14 @@ class Medicamentos:
         coberturaInicial = {}
         coberturaFinal = {}
         coberturaFinal_dict = {}
+        estoqueFinal = {}
         np_arr = np.random.rand(1,5)
         #print("NPARR",np_arr)
         cols = list(self.df_forecast.columns)
         
         for key in list(self.d.keys()):
             forecast[key] = {}
-            
+            estoqueFinal[key] = {}
         
             for i in range(len(self.df_forecast)):
                 if self.df_forecast.loc[i, 'Product Code'] == key:
@@ -160,8 +161,8 @@ class Medicamentos:
                             coberturaFinal_dict[key] = np_arr[0][idx]/forecast[key][indexes[idx + 1]]
 
 
+
                             #print(coberturaFinal_dict[key])
-                        
 #                        k = 0
 #                        for i in range(len(cols)):
 #                            if i == j and i < lim:
