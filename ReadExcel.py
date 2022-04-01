@@ -139,8 +139,8 @@ class Medicamentos:
                     for j in range(numCols):
                         if cols[j] == month and monthFlag == False:
                             monthFlag = True
-                            if j + 5 <= numCols:
-                                lim = j + 5
+                            if j + 6 <= numCols:
+                                lim = j + 6
                             else:
                                 lim = numCols
                             break
@@ -152,12 +152,15 @@ class Medicamentos:
                         #print(cols)
                         #forecast[key]= self.df_forecast.loc[i, cols[j:lim]]
                         forecast[key] = temp_df[cols[j:lim]]
-                        print(forecast[key].index)
+                        #print(forecast[key].index)
                         indexes = list(forecast[key].index)
+                        
 
-                        for idx in range (len(indexes)):
-                            coberturaFinal_dict[key] = forecast[key][indexes[idx]]/np_arr[0][idx]
-                            print(coberturaFinal_dict[key])
+                        for idx in range (len(np_arr)):
+                            coberturaFinal_dict[key] = np_arr[0][idx]/forecast[key][indexes[idx + 1]]
+
+
+                            #print(coberturaFinal_dict[key])
                         
 #                        k = 0
 #                        for i in range(len(cols)):
@@ -176,7 +179,7 @@ class Medicamentos:
                                 cInicial.append(estoque_inicial/v)
                             else:
                                 cInicial.append(cInicial[-1]/v)
-                        print(cInicial)
+                        #print(cInicial)
 
             
             #print(forecast[key])
@@ -186,7 +189,7 @@ class Medicamentos:
 #            print(test[key][['Batch', 'Plant']])#.values)
 #            print()
         #print(test)
-        #print(forecast)
+        print(forecast)
         #print(forecast['F1231201']['JAN 2021'])
 
         #for i in forecast['F1231201']:
