@@ -13,5 +13,7 @@ print('122.2'.replace('.', '').replace(',', '').isdigit())
 
 print('1'.isdigit())
 
+print(str(date.today().strftime('%b/%Y')).lower())
 
-print(a)
+
+#print(a)

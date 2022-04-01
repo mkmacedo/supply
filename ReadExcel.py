@@ -110,6 +110,7 @@ class Medicamentos:
 
         #Planilha Forecast
         forecast = {}
+        estoque_final = {}
         coberturaInicial = {}
         coberturaFinal = {}
         coberturaFinal_dict = {}
@@ -119,6 +120,7 @@ class Medicamentos:
         
         for key in list(self.d.keys()):
             forecast[key] = {}
+            estoque_final[key] = {}
             
         
             for i in range(len(self.df_forecast)):
@@ -158,6 +160,8 @@ class Medicamentos:
                         for idx in range (len(indexes)):
                             coberturaFinal_dict[key] = forecast[key][indexes[idx]]/np_arr[0][idx]
                             print(coberturaFinal_dict[key])
+
+                        
                         
 #                        k = 0
 #                        for i in range(len(cols)):
