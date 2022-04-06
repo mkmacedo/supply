@@ -1,7 +1,6 @@
 from cmath import nan
 from datetime import date, datetime, timedelta
 import math
-from xml.dom import NAMESPACE_ERR
 import pandas as pd
 import regexes
 import sys
@@ -110,17 +109,22 @@ class Medicamentos:
 
         #Planilha Forecast
         forecast = {}
+        estoqueInicial = {}
         coberturaInicial = {}
         coberturaFinal = {}
-        coberturaFinal_dict = {}
         estoqueFinal = {}
+        entrada ={}
         np_arr = np.random.rand(1,5)
+        
         #print("NPARR",np_arr)
         cols = list(self.df_forecast.columns)
         
         for key in list(self.d.keys()):
             forecast[key] = {}
+            estoqueInicial[key] = {}
             estoqueFinal[key] = {}
+            coberturaFinal[key] = {}
+            entrada[key] = {}
         
             for i in range(len(self.df_forecast)):
                 if self.df_forecast.loc[i, 'Product Code'] == key:
@@ -155,11 +159,47 @@ class Medicamentos:
                         forecast[key] = temp_df[cols[j:lim]]
                         #print(forecast[key].index)
                         indexes = list(forecast[key].index)
+
+                        coberturaFinal_dict = {}
+                        for idx in range(len(np_arr[0])):
+                            coberturaFinal_dict[indexes[idx]] = np_arr[0][idx]/forecast[key][indexes[idx + 1]]
+                        coberturaFinal[key] = pd.Series(coberturaFinal_dict, index=indexes[:-1])                        
                         
 
-                        for idx in range (len(np_arr)):
-                            coberturaFinal_dict[key] = np_arr[0][idx]/forecast[key][indexes[idx + 1]]
+                        tmp_dict = {}
 
+                        for m in indexes[:-1]: 
+                            tmp_dict[m] = coberturaFinal[key][m]
+                        
+                        #>>>>>>>>>>>>>>>> Temporary Assignment <<<<<<<<<<<<<<<
+                        #estoqueFinal[key] = pd.Series(data=tmp_dict, index=indexes[:-1])
+                        estoqueInicial[key] = pd.Series(data=tmp_dict, index=indexes[:-1])
+                        entrada[key] = pd.Series(data=tmp_dict, index=indexes[:-1])
+
+                        for m in indexes[:-1]: 
+                            #formatted_m = m.replace(' ', '/').lower()
+                            #formatted_m = formatted_m[:formatted_m.find('/') + 1]+formatted_m[formatted_m.find('/')+3:]
+                            #print(m)
+                            #print(formatted_m)
+                            #if m == to
+                            
+                            
+                            if m == month:
+                                if self.d.get(key) != None:
+                                    #print('YO!')
+                                    print(forecast[key])
+
+                                    if forecast[key][m] > self.d[key].get('Colocado'):# and estoqueInicial[key][m] > self.d[key].get('Colocado'):
+                                        #print('AYOOO')
+                                        estoqueFinal[key][m] = estoqueInicial[key][m] + entrada[key] - forecast[key][m]
+                                    else:
+                                        estoqueFinal[key][m] = estoqueInicial[key][m] + entrada[key] - self.d[key]['Colocado']
+                            else:
+                                estoqueFinal[key][m] = estoqueInicial[key][m] + entrada[key] - forecast[key][m]
+
+                        #print(estoqueInicial)
+                        #print(estoqueFinal)
+                        #print(entrada)
 
 
                             #print(coberturaFinal_dict[key])
@@ -190,7 +230,7 @@ class Medicamentos:
 #            print(test[key][['Batch', 'Plant']])#.values)
 #            print()
         #print(test)
-        print(forecast)
+        #print(forecast)
         #print(forecast['F1231201']['JAN 2021'])
 
         #for i in forecast['F1231201']:

@@ -1,11 +1,1 @@
-=ÍNDICE(
-    Forecast!$E$3:$AB$25;
-    CORRESP($B6;Forecast!$A$3:$A$25;0); 
-        CORRESP(V$5;
-            Forecast!$E$2:$AB$2;0)
-    )
-
-
-    =ÍNDICE(Forecast!$E$3:$AB$25;
-    CORRESP($B7;Forecast!$A$3:$A$25;0);
-    CORRESP(W$6;Forecast!$E$2:$AB$2;0))
+=SE(V$6=$B$2;SE($C10<V9;V7+V10-V9;V7+V10-$C10);V7+V10-V9)
