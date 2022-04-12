@@ -1,3 +1,4 @@
+a = [1,2,3,4]
+print(a.index(3))
 
-a = [1,2,3]
-print(a[a.index(1):-1])
+print(a[2:4])

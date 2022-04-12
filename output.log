@@ -1,0 +1,156 @@
+Aba Vendas (TRANSAÇÃO SAP)(1).xlsx
+Aba Produtos - lotes em trânsito (planilha da rede)(1).xlsx
+Lotes estoque (TRANSAÇÃO SAP - bloqueados)(1).xlsx
+Lotes estoque (TRANSAÇÃO SAP - todos os lotes)(1).xlsx
+Aba Forecast (SAP IBP)(1).xlsx
+Aba Colocado (planilha da rede-area de trabalho)(1).xlsx
+Planejamento Biotech + Stilamin(1).xlsx
+
+{'FN151201':       month forecast  EstoqueFinal
+0  JAN 2021    938.0  -1049.998422
+1  FEB 2021   1185.0  -1184.999284
+2  MAR 2021   1904.0  -1903.998417
+3  APR 2021    937.0   -936.999053
+4  MAY 2021   1444.0  -1443.999125
+5  JUN 2021   1475.0           NaN, 'F75D1201':       month forecast  EstoqueFinal
+0  JAN 2021    318.0   -373.998734
+1  FEB 2021   1477.0  -1476.999379
+2  MAR 2021   2195.0  -2194.997649
+3  APR 2021    631.0   -630.999053
+4  MAY 2021   1445.0  -1444.998960
+5  JUN 2021   1241.0           NaN, 'FN131201':       month forecast  EstoqueFinal
+0  JAN 2021  10883.0 -10882.999898
+1  FEB 2021  18316.0 -18315.999856
+2  MAR 2021   9472.0  -9471.999729
+3  APR 2021   5474.0  -5473.999759
+4  MAY 2021   5685.0  -5684.999704
+5  JUN 2021   4358.0           NaN, 'F55A12A1':       month forecast  EstoqueFinal
+0  JAN 2021   1816.0  -1815.999683
+1  FEB 2021   5893.0  -5892.999868
+2  MAR 2021  10361.0 -10360.999608
+3  APR 2021   3787.0  -3786.999820
+4  MAY 2021   7617.0  -7616.999754
+5  JUN 2021   5243.0           NaN, 'FCB11211':       month forecast  EstoqueFinal
+0  JAN 2021     50.0    -49.969833
+1  FEB 2021     62.0           NaN
+2  MAR 2021      NaN           NaN
+3  APR 2021     85.0    -84.990088
+4  MAY 2021    138.0   -137.988372
+5  JUN 2021    111.0           NaN, 'FCB11221':       month forecast  EstoqueFinal
+0  JAN 2021      NaN           NaN
+1  FEB 2021      NaN           NaN
+2  MAR 2021      NaN           NaN
+3  APR 2021      NaN           NaN
+4  MAY 2021      NaN           NaN
+5  JUN 2021      NaN           NaN, 'FTP11201':       month forecast  EstoqueFinal
+0  JAN 2021      NaN           NaN
+1  FEB 2021      NaN           NaN
+2  MAR 2021      NaN           NaN
+3  APR 2021      NaN           NaN
+4  MAY 2021      NaN           NaN
+5  JUN 2021      NaN           NaN, 'F56B12A3':       month forecast  EstoqueFinal
+0  JAN 2021    752.0   -751.996701
+1  FEB 2021    567.0   -566.998567
+2  MAR 2021    951.0   -950.996703
+3  APR 2021    450.0   -449.998054
+4  MAY 2021    703.0   -702.998286
+5  JUN 2021    753.0           NaN, 'F56B1201':       month forecast  EstoqueFinal
+0  JAN 2021     27.0    -26.974379
+1  FEB 2021     73.0    -72.988550
+2  MAR 2021    119.0   -118.752741
+3  APR 2021      6.0     -7.367905
+4  MAY 2021     -1.0           NaN
+5  JUN 2021      NaN           NaN, 'F1251201':       month forecast  EstoqueFinal
+0  JAN 2021   2432.0  -2431.999268
+1  FEB 2021   2556.0  -2555.999699
+2  MAR 2021   4520.0  -4519.999289
+3  APR 2021   2088.0  -2087.999527
+4  MAY 2021   2891.0  -2890.999612
+5  JUN 2021   3324.0           NaN, 'F19D1207':       month forecast  EstoqueFinal
+0  JAN 2021     16.0    -62.996914
+1  FEB 2021    606.0   -605.998666
+2  MAR 2021   1021.0  -1020.995349
+3  APR 2021    319.0   -318.998624
+4  MAY 2021    994.0   -993.997206
+5  JUN 2021    462.0           NaN, 'F1991207':       month forecast  EstoqueFinal
+0  JAN 2021    401.0   -897.998950
+1  FEB 2021   1781.0  -1780.999638
+2  MAR 2021   3766.0  -3765.999089
+3  APR 2021   1628.0  -1627.999441
+4  MAY 2021   2447.0  -2446.999270
+5  JUN 2021   1767.0           NaN, 'F1231201':       month forecast  EstoqueFinal
+0  JAN 2021   1976.0  -1975.999032
+1  FEB 2021   1933.0  -1932.999596
+2  MAR 2021   3376.0  -3375.998735
+3  APR 2021   1173.0  -1172.999397
+4  MAY 2021   2268.0  -2267.999313
+5  JUN 2021   1880.0           NaN, 'F7591201':       month forecast  EstoqueFinal
+0  JAN 2021   1531.0  -2800.999689
+1  FEB 2021   6007.0  -6006.999912
+2  MAR 2021  15508.0 -15507.999490
+3  APR 2021   2907.0  -2906.999842
+4  MAY 2021   8666.0  -8665.999813
+5  JUN 2021   6905.0           NaN, 'F6721201':       month forecast  EstoqueFinal
+0  JAN 2021      2.0           NaN
+1  FEB 2021      NaN           NaN
+2  MAR 2021      NaN           NaN
+3  APR 2021      2.0     -1.804585
+4  MAY 2021      7.0     -5.709303
+5  JUN 2021      1.0           NaN, 'F54G1203':       month forecast  EstoqueFinal
+0  JAN 2021    820.0  -1084.999315
+1  FEB 2021   2731.0  -2730.999671
+2  MAR 2021   4144.0  -4143.999496
+3  APR 2021   2946.0  -2945.999429
+4  MAY 2021   2394.0  -2393.999480
+5  JUN 2021   2481.0           NaN, 'F19B1207':       month forecast  EstoqueFinal
+0  JAN 2021     43.0    -42.972495
+1  FEB 2021     68.0    -67.993971
+2  MAR 2021    226.0   -225.965499
+3  APR 2021     43.0    -42.993920
+4  MAY 2021    225.0   -224.993969
+5  JUN 2021    214.0           NaN, 'F75B1201':       month forecast  EstoqueFinal
+0  JAN 2021     47.0    -46.988933
+1  FEB 2021    169.0   -168.997777
+2  MAR 2021    613.0   -612.989698
+3  APR 2021    144.0   -143.995855
+4  MAY 2021    330.0   -329.997053
+5  JUN 2021    438.0           NaN, 'F1211201':       month forecast  EstoqueFinal
+0  JAN 2021    351.0   -350.993638
+1  FEB 2021    294.0   -293.998084
+2  MAR 2021    711.0   -710.986513
+3  APR 2021    110.0   -109.995765
+4  MAY 2021    323.0   -322.994160
+5  JUN 2021    221.0           NaN, 'F7541201':       month forecast  EstoqueFinal
+0  JAN 2021    381.0   -878.997765
+1  FEB 2021    837.0   -836.999590
+2  MAR 2021   3323.0  -3322.997948
+3  APR 2021    723.0   -722.997587
+4  MAY 2021    567.0   -566.999054
+5  JUN 2021   1365.0           NaN, 'F05512A1':       month forecast  EstoqueFinal
+0  JAN 2021   -161.0   -164.955468
+1  FEB 2021     42.0    -41.931875
+2  MAR 2021     20.0    -18.516446
+3  APR 2021      1.0           inf
+4  MAY 2021      0.0     -0.099284
+5  JUN 2021    -13.0           NaN, 'F0111201':       month forecast  EstoqueFinal
+0  JAN 2021    748.0   -747.996581
+1  FEB 2021    547.0   -546.998848
+2  MAR 2021   1183.0  -1182.997872
+3  APR 2021    697.0   -696.998686
+4  MAY 2021   1041.0  -1040.998138
+5  JUN 2021    693.0           NaN, 'F6741201':       month forecast  EstoqueFinal
+0  JAN 2021      5.0    -15.129650
+1  FEB 2021      1.0     -0.727500
+2  MAR 2021      5.0     -4.703289
+3  APR 2021      5.0     -4.863209
+4  MAY 2021     10.0     -9.677326
+5  JUN 2021      4.0           NaN, 'F5151201':       month forecast  EstoqueFinal
+0  JAN 2021    333.0   -332.991537
+1  FEB 2021    221.0   -220.995742
+2  MAR 2021    320.0   -320.011964
+3  APR 2021   -124.0    124.002763
+4  MAY 2021    495.0   -494.913954
+5  JUN 2021     15.0           NaN, nan: Empty DataFrame
+Columns: []
+Index: []}
+

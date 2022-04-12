@@ -117,12 +117,10 @@ class Medicamentos:
         entrada ={}
         np_arr = np.random.rand(1,5)
         
-        #print("NPARR",np_arr)
         cols = list(self.df_forecast.columns)
         
         for key in list(self.d.keys()):
             df[key] = pd.DataFrame()
-            #forecast[key] = {}
             estoqueInicial[key] = {}
             estoqueFinal[key] = {}
             coberturaFinal[key] = {}
@@ -131,8 +129,6 @@ class Medicamentos:
             for i in range(len(self.df_forecast)):
                 if self.df_forecast.loc[i, 'Product Code'] == key:
                     temp_df = self.df_forecast.loc[i]
-                    #print(temp_df)
-
 
                     monthFlag = False
                     numCols = len(cols)
@@ -148,13 +144,9 @@ class Medicamentos:
                             break
 
                     if monthFlag == True and j < lim:
-                        #forecast[key][cols[j]] = self.df_forecast.loc[i, cols[j]]
-                        #temp_df = self.df_forecast.loc[i]
-                        #print(temp_df[cols[j:lim]])#.values)
-                        #print(cols)
-                        #forecast[key]= self.df_forecast.loc[i, cols[j:lim]]
+
                         forecast[key] = temp_df[cols[j:lim]]
-                        #print(forecast[key].index)
+
                         indexes = list(forecast[key].index)
 
                         coberturaFinal_dict = {}
@@ -167,11 +159,8 @@ class Medicamentos:
 
                         for m in indexes[:-1]: 
                             tmp_dict[m] = coberturaFinal[key][m]
-                        
-                        #>>>>>>>>>>>>>>>> Temporary Assignment <<<<<<<<<<<<<<<
-                        #estoqueFinal[key] = pd.Series(data=tmp_dict, index=indexes[:-1])
+
                         estoqueInicial[key] = pd.Series(data=tmp_dict, index=indexes[:-1])
-                        #print(estoqueInicial[key])
                         entrada[key] = pd.Series(data=tmp_dict, index=indexes[:-1])
 
 
@@ -179,108 +168,37 @@ class Medicamentos:
                         tmp_estoqueFinal.setdefault(key, pd.Series(index=indexes[:-1]))
 
                         for m in indexes[:-1]: 
-                            #formatted_m = m.replace(' ', '/').lower()
-                            #formatted_m = formatted_m[:formatted_m.find('/') + 1]+formatted_m[formatted_m.find('/')+3:]
-                            #print(m)
-                            #print(formatted_m)
-                            #if m == to
+
                             
                             
                             if m == month:
                                 if self.d.get(key) != None:
-                                    #('YO!')
-                                    #print(forecast[key])
 
-                                    if forecast[key][m] > self.d[key].get('Colocado'):# and estoqueInicial[key][m] > self.d[key].get('Colocado'):
-                                        #print('AYOOO')
+                                    if forecast[key][m] > self.d[key].get('Colocado'):
+
                                         tmp_estoqueFinal[key][m] = estoqueInicial[key][m] + entrada[key][m] - forecast[key][m]
                                     else:
                                         tmp_estoqueFinal[key][m] = estoqueInicial[key][m] + entrada[key][m] - self.d[key]['Colocado']
                             else:
                                 tmp_estoqueFinal[key][m] = estoqueInicial[key][m] + entrada[key][m] - forecast[key][m]
-                        #print('ESTOQUE FINALLLL', tmp_estoqueFinal)
+
                         estoqueFinal[key] = pd.Series(data=tmp_estoqueFinal[key], index=indexes)
 
-                        #print(estoqueFinal)
-
-                            
-                            
-                        #print('TESTE', estoqueInicial[key].values)
-                        #print(estoqueFinal)
-                        #print(entrada)
                     df[key]['month'] = indexes
                     df[key]['forecast'] = forecast[key].values
                     df[key]['EstoqueFinal'] = estoqueFinal[key].values
-                        #print('TESTE', estoqueInicial[key].values)
+
                         
-                #print(df[key].head())
-
-            print(df)           
-
-
-
-
-                        #coberturaFinal[key] = 
-                        #print(cInicial)
-            #print(forecast[key])
-        df_dict = {}
-        unique_codes = self.df_forecast['Product Code'].unique()
-
-        for u in unique_codes:
-            df_dict[u] = pd.DataFrame()
-            for i in range(len(self.df_forecast)):
-                if self.df_forecast.loc[i, 'Product Code'] == u:
-                    k = 0
-                    for e in list(self.df_forecast.loc[i].index):
-                        if e == month:
-                            k = list(self.df_forecast.loc[i].index).index(e)
-                            if k + 6 > len(list(self.df_forecast.loc[i].index)):
-                                limite = list(self.df_forecast.loc[i].index).index(e)
-                            else:
-                                limite = k + 6
-                            #print(k)
-                    idxs = list(self.df_forecast.loc[i].index)[k:limite]
-                    df_dict[u]['month'] = idxs
-                    
-        #print(df_dict)
-
-        #print(table_df.head())
-
-            
-            
-
+            #print(df[key].head())
+        
+        print(df)
         print()
-#        for key in list(test.keys()):
-#            print(test[key][['Batch', 'Plant']])#.values)
-#            print()
-        #print(test)
-        #print(forecast)
-        #print(forecast['F1231201']['JAN 2021'])
-
-        #for i in forecast['F1231201']:
-        #    print(i)
-
-        #Estoque Inicial
 
 
 
 
 
 
-
-
-
-        #x = list(self.d.keys())
-        #print(math.isnan(x[-1]))
-        #print(math.isnan(x[-1]))
-        #print(x[-1].isnan())
-        #print(self.d)
 
 x = Medicamentos(sheets)
 x.calcular('JAN 2021', 39)
-
-
-#print(codigo_material)
-
-
-#print(df_biotech.head())
