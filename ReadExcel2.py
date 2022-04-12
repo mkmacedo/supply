@@ -1,6 +1,8 @@
 from cmath import nan
 from datetime import date, datetime, timedelta
 import math
+from operator import index
+from matplotlib.pyplot import axes, axis
 import pandas as pd
 import regexes
 import sys
@@ -152,7 +154,8 @@ class Medicamentos:
                         coberturaFinal_dict = {}
                         for idx in range(len(np_arr[0])):
                             coberturaFinal_dict[indexes[idx]] = np_arr[0][idx]/forecast[key][indexes[idx + 1]]
-                        coberturaFinal[key] = pd.Series(coberturaFinal_dict, index=indexes[:-1])                        
+                        coberturaFinal[key] = pd.Series(coberturaFinal_dict, index=indexes)  
+                                             
                         
 
                         tmp_dict = {}
@@ -160,8 +163,8 @@ class Medicamentos:
                         for m in indexes[:-1]: 
                             tmp_dict[m] = coberturaFinal[key][m]
 
-                        estoqueInicial[key] = pd.Series(data=tmp_dict, index=indexes[:-1])
-                        entrada[key] = pd.Series(data=tmp_dict, index=indexes[:-1])
+                        estoqueInicial[key] = pd.Series(data=tmp_dict, index=indexes)
+                        entrada[key] = pd.Series(data=tmp_dict, index=indexes)
 
 
                         tmp_estoqueFinal = {}
@@ -186,7 +189,23 @@ class Medicamentos:
 
                     df[key]['month'] = indexes
                     df[key]['forecast'] = forecast[key].values
+                    df[key]['Entrada'] = entrada[key].values
+                    df[key]['EstoqueInicial'] = estoqueInicial[key].values
                     df[key]['EstoqueFinal'] = estoqueFinal[key].values
+                    df[key]['CoberturaInicial'] = df[key].apply(lambda x: 0, axis = 1)
+                    df[key]['CoberturaFinal'] = coberturaFinal[key].values
+                    
+      
+
+       
+                    for i in range(len(df[key])):
+                        try:
+                            df[key].loc[i, 'CoberturaInicial'] = df[key].loc[i, 'EstoqueInicial'] / df[key].loc[i, 'forecast']
+                        except:
+                            pass       
+
+
+
 
                         
             #print(df[key].head())
