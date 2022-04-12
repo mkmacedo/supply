@@ -127,6 +127,7 @@ class Medicamentos:
             estoqueFinal[key] = {}
             coberturaFinal[key] = {}
             entrada[key] = {}
+
         
             for i in range(len(self.df_forecast)):
                 if self.df_forecast.loc[i, 'Product Code'] == key:
@@ -187,6 +188,7 @@ class Medicamentos:
 
                         estoqueFinal[key] = pd.Series(data=tmp_estoqueFinal[key], index=indexes)
 
+
                     df[key]['month'] = indexes
                     df[key]['forecast'] = forecast[key].values
                     df[key]['Entrada'] = entrada[key].values
@@ -194,7 +196,7 @@ class Medicamentos:
                     df[key]['EstoqueFinal'] = estoqueFinal[key].values
                     df[key]['CoberturaInicial'] = df[key].apply(lambda x: 0, axis = 1)
                     df[key]['CoberturaFinal'] = coberturaFinal[key].values
-                    
+                    df[key]['EstoquePolitica'] = df[key].apply(lambda x: 0, axis = 1)
       
 
        
@@ -202,9 +204,12 @@ class Medicamentos:
                         try:
                             df[key].loc[i, 'CoberturaInicial'] = df[key].loc[i, 'EstoqueInicial'] / df[key].loc[i, 'forecast']
                         except:
+                            pass
+
+                        try:
+                            df[key].loc[i, 'EstoquePolitica'] = df[key].loc[i, 'forecast'] + df[key].loc[i+1, 'forecast'] / 3
+                        except:
                             pass       
-
-
 
 
                         
