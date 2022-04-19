@@ -1,10 +1,13 @@
 from cmath import nan
 from datetime import date, datetime, timedelta
 import math
+from operator import index
+from matplotlib.pyplot import axes, axis
 import pandas as pd
 import regexes
 import sys
 import numpy as np
+import re
 
 #pln1 = sys.argv[1]
 #pln2 = sys.argv[2]
@@ -39,6 +42,7 @@ class Medicamentos:
         self.df_forecast = pd.read_excel(sheets[4].strip())
         self.df_colocado = pd.read_excel(sheets[5].strip())
         self.df_biotech = pd.read_excel(sheets[6].strip())
+        self.df_jda = pd.read_excel(sheets[7].strip())
 
         self.d = {}
 
@@ -117,22 +121,19 @@ class Medicamentos:
         entrada ={}
         np_arr = np.random.rand(1,5)
         
-        #print("NPARR",np_arr)
         cols = list(self.df_forecast.columns)
         
         for key in list(self.d.keys()):
             df[key] = pd.DataFrame()
-            #forecast[key] = {}
             estoqueInicial[key] = {}
             estoqueFinal[key] = {}
             coberturaFinal[key] = {}
             entrada[key] = {}
+
         
             for i in range(len(self.df_forecast)):
                 if self.df_forecast.loc[i, 'Product Code'] == key:
                     temp_df = self.df_forecast.loc[i]
-                    #print(temp_df)
-
 
                     monthFlag = False
                     numCols = len(cols)
@@ -148,139 +149,122 @@ class Medicamentos:
                             break
 
                     if monthFlag == True and j < lim:
-                        #forecast[key][cols[j]] = self.df_forecast.loc[i, cols[j]]
-                        #temp_df = self.df_forecast.loc[i]
-                        #print(temp_df[cols[j:lim]])#.values)
-                        #print(cols)
-                        #forecast[key]= self.df_forecast.loc[i, cols[j:lim]]
+
                         forecast[key] = temp_df[cols[j:lim]]
-                        #print(forecast[key].index)
+
                         indexes = list(forecast[key].index)
 
                         coberturaFinal_dict = {}
                         for idx in range(len(np_arr[0])):
                             coberturaFinal_dict[indexes[idx]] = np_arr[0][idx]/forecast[key][indexes[idx + 1]]
-                        coberturaFinal[key] = pd.Series(coberturaFinal_dict, index=indexes[:-1])                        
+                        coberturaFinal[key] = pd.Series(coberturaFinal_dict, index=indexes)  
+                                             
                         
 
                         tmp_dict = {}
 
                         for m in indexes[:-1]: 
                             tmp_dict[m] = coberturaFinal[key][m]
-                        
-                        #>>>>>>>>>>>>>>>> Temporary Assignment <<<<<<<<<<<<<<<
-                        #estoqueFinal[key] = pd.Series(data=tmp_dict, index=indexes[:-1])
-                        estoqueInicial[key] = pd.Series(data=tmp_dict, index=indexes[:-1])
-                        #print(estoqueInicial[key])
-                        entrada[key] = pd.Series(data=tmp_dict, index=indexes[:-1])
+
+                        estoqueInicial[key] = pd.Series(data=tmp_dict, index=indexes)
+                        entrada[key] = pd.Series(data=tmp_dict, index=indexes)
 
 
                         tmp_estoqueFinal = {}
                         tmp_estoqueFinal.setdefault(key, pd.Series(index=indexes[:-1]))
 
                         for m in indexes[:-1]: 
-                            #formatted_m = m.replace(' ', '/').lower()
-                            #formatted_m = formatted_m[:formatted_m.find('/') + 1]+formatted_m[formatted_m.find('/')+3:]
-                            #print(m)
-                            #print(formatted_m)
-                            #if m == to
                             
                             
                             if m == month:
                                 if self.d.get(key) != None:
-                                    #('YO!')
-                                    #print(forecast[key])
 
-                                    if forecast[key][m] > self.d[key].get('Colocado'):# and estoqueInicial[key][m] > self.d[key].get('Colocado'):
-                                        #print('AYOOO')
+                                    if forecast[key][m] > self.d[key].get('Colocado'):
+
                                         tmp_estoqueFinal[key][m] = estoqueInicial[key][m] + entrada[key][m] - forecast[key][m]
                                     else:
                                         tmp_estoqueFinal[key][m] = estoqueInicial[key][m] + entrada[key][m] - self.d[key]['Colocado']
                             else:
                                 tmp_estoqueFinal[key][m] = estoqueInicial[key][m] + entrada[key][m] - forecast[key][m]
-                        #print('ESTOQUE FINALLLL', tmp_estoqueFinal)
+
                         estoqueFinal[key] = pd.Series(data=tmp_estoqueFinal[key], index=indexes)
 
-                        #print(estoqueFinal)
 
-                            
-                            
-                        #print('TESTE', estoqueInicial[key].values)
-                        #print(estoqueFinal)
-                        #print(entrada)
                     df[key]['month'] = indexes
                     df[key]['forecast'] = forecast[key].values
+                    df[key]['Entrada'] = df[key].apply(lambda x: 0, axis = 1)#entrada[key].values
+                    df[key]['EstoqueInicial'] = estoqueInicial[key].values
                     df[key]['EstoqueFinal'] = estoqueFinal[key].values
-                        #print('TESTE', estoqueInicial[key].values)
-                        
-                #print(df[key].head())
+                    df[key]['CoberturaInicial'] = df[key].apply(lambda x: 0, axis = 1)
+                    df[key]['CoberturaFinal'] = coberturaFinal[key].values
+                    df[key]['EstoquePolitica'] = df[key].apply(lambda x: 0, axis = 1)
+      
 
-            print(df)           
+       
+                    for i in range(len(df[key])):
+                        try:
+                            df[key].loc[i, 'CoberturaInicial'] = df[key].loc[i, 'EstoqueInicial'] / df[key].loc[i, 'forecast']
+                        except:
+                            pass
 
+                        try:
+                            df[key].loc[i, 'EstoquePolitica'] = df[key].loc[i, 'forecast'] + df[key].loc[i+1, 'forecast'] / 3
+                        except:
+                            pass       
+        
+        jda_cols = self.df_jda.columns
 
-
-
-                        #coberturaFinal[key] = 
-                        #print(cInicial)
-            #print(forecast[key])
-        df_dict = {}
-        unique_codes = self.df_forecast['Product Code'].unique()
-
-        for u in unique_codes:
-            df_dict[u] = pd.DataFrame()
-            for i in range(len(self.df_forecast)):
-                if self.df_forecast.loc[i, 'Product Code'] == u:
-                    k = 0
-                    for e in list(self.df_forecast.loc[i].index):
-                        if e == month:
-                            k = list(self.df_forecast.loc[i].index).index(e)
-                            if k + 6 > len(list(self.df_forecast.loc[i].index)):
-                                limite = list(self.df_forecast.loc[i].index).index(e)
+        for j in range(len(self.df_jda)):
+            if self.df_jda.loc[j, 'Item'] in list(df.keys()):   
+                for d in list(self.df_jda.columns[15:]):
+                    #print(d)
+                    d2 = re.search(r'[0-9][0-9]\.[0-9][0-9]\.[0-9][0-9]', d)
+                    formatted_d2 = ''
+                    if d2 != None:
+                        formatted_d2 = d2.group().replace('.', '/')
+                        date_obj = datetime.strptime(formatted_d2, '%d/%m/%y')
+                        formatted_d2 = date_obj.strftime('%b %Y').upper()
+                        #print(formatted_d2)
+                    for i in range(len(df[self.df_jda.loc[j, 'Item']])):
+                        #print(i)
+                        #print(df[key])
+                        #print(df[key].loc[i, 'month'])
+                        #print(formatted_d2)
+                        #print(d)
+                        if df[self.df_jda.loc[j, 'Item']].loc[i, 'month'] == formatted_d2:
+                            if type(df[self.df_jda.loc[j, 'Item']].loc[i, 'Entrada']) == type(1.1):
+                                if type(self.df_jda.loc[j, d]) == type(1.1):
+                                    df[self.df_jda.loc[j, 'Item']].loc[i, 'Entrada'] += self.df_jda.loc[j, d]
                             else:
-                                limite = k + 6
-                            #print(k)
-                    idxs = list(self.df_forecast.loc[i].index)[k:limite]
-                    df_dict[u]['month'] = idxs
-                    
-        #print(df_dict)
+                                df[self.df_jda.loc[j, 'Item']].loc[i, 'Entrada'] = self.df_jda.loc[j, d]
 
-        #print(table_df.head())
+                            print(df[self.df_jda.loc[j, 'Item']].loc[i, 'Entrada'])
+                            print(type(df[self.df_jda.loc[j, 'Item']].loc[i, 'Entrada']))
+                        else:
+                            pass
+                            
 
-            
-            
+            #print(df[key].head())
+        
+        print(df)
+#        jda_cols = self.df_jda.columns
+#
+#        #print(list(self.df_jda.columns[15:]))
+#        for d in list(self.df_jda.columns[15:]):
+#            #print(d)
+#            d2 = re.search(r'[0-9][0-9]\.[0-9][0-9]\.[0-9][0-9]', d)
+#            if d2 != None:
+#                formatted_d2 = d2.group().replace('.', '/')
+#                date_obj = datetime.strptime(formatted_d2, '%d/%m/%y')
+#                formatted_d2 = date_obj.strftime('%b %Y').upper()
 
         print()
-#        for key in list(test.keys()):
-#            print(test[key][['Batch', 'Plant']])#.values)
-#            print()
-        #print(test)
-        #print(forecast)
-        #print(forecast['F1231201']['JAN 2021'])
-
-        #for i in forecast['F1231201']:
-        #    print(i)
-
-        #Estoque Inicial
 
 
 
 
 
 
-
-
-
-        #x = list(self.d.keys())
-        #print(math.isnan(x[-1]))
-        #print(math.isnan(x[-1]))
-        #print(x[-1].isnan())
-        #print(self.d)
 
 x = Medicamentos(sheets)
-x.calcular('JAN 2021', 39)
-
-
-#print(codigo_material)
-
-
-#print(df_biotech.head())
+x.calcular('JAN 2022', 39)

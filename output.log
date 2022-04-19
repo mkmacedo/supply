@@ -5,200 +5,173 @@ Lotes estoque (TRANSAÇÃO SAP - todos os lotes)(1).xlsx
 Aba Forecast (SAP IBP)(1).xlsx
 Aba Colocado (planilha da rede-area de trabalho)(1).xlsx
 Planejamento Biotech + Stilamin(1).xlsx
+Arquivo-JDA_2_.xlsx
 
-{'FN151201':       month forecast  ...  CoberturaFinal  EstoquePolitica
-0  JAN 2021    938.0  ...        0.000219      1333.000000
-1  FEB 2021   1185.0  ...        0.000191      1819.666667
-2  MAR 2021   1904.0  ...        0.000672      2216.333333
-3  APR 2021    937.0  ...        0.000252      1418.333333
-4  MAY 2021   1444.0  ...        0.000414      1935.666667
-5  JUN 2021   1475.0  ...             NaN         0.000000
-
-[6 rows x 8 columns], 'F75D1201':       month forecast  ...  CoberturaFinal  EstoquePolitica
-0  JAN 2021    318.0  ...        0.000176       810.333333
-1  FEB 2021   1477.0  ...        0.000166      2208.666667
-2  MAR 2021   2195.0  ...        0.000998      2405.333333
-3  APR 2021    631.0  ...        0.000252      1112.666667
-4  MAY 2021   1445.0  ...        0.000492      1858.666667
-5  JUN 2021   1241.0  ...             NaN         0.000000
-
-[6 rows x 8 columns], 'FN131201':       month forecast  ...  CoberturaFinal  EstoquePolitica
-0  JAN 2021  10883.0  ...        0.000014     16988.333333
-1  FEB 2021  18316.0  ...        0.000038     21473.333333
-2  MAR 2021   9472.0  ...        0.000115     11296.666667
-3  APR 2021   5474.0  ...        0.000064      7369.000000
-4  MAY 2021   5685.0  ...        0.000140      7137.666667
-5  JUN 2021   4358.0  ...             NaN         0.000000
-
-[6 rows x 8 columns], 'F55A12A1':       month forecast  ...  CoberturaFinal  EstoquePolitica
-0  JAN 2021   1816.0  ...        0.000044      3780.333333
-1  FEB 2021   5893.0  ...        0.000035      9346.666667
-2  MAR 2021  10361.0  ...        0.000166     11623.333333
-3  APR 2021   3787.0  ...        0.000048      6326.000000
-4  MAY 2021   7617.0  ...        0.000116      9364.666667
-5  JUN 2021   5243.0  ...             NaN         0.000000
-
-[6 rows x 8 columns], 'FCB11211':       month forecast  ...  CoberturaFinal  EstoquePolitica
-0  JAN 2021     50.0  ...        0.004193        70.666667
-1  FEB 2021     62.0  ...             NaN              NaN
-2  MAR 2021      NaN  ...        0.007409              NaN
-3  APR 2021     85.0  ...        0.002635       131.000000
-4  MAY 2021    138.0  ...        0.005497       175.000000
-5  JUN 2021    111.0  ...             NaN         0.000000
-
-[6 rows x 8 columns], 'FCB11221':       month forecast  ...  CoberturaFinal  EstoquePolitica
-0  JAN 2021      NaN  ...             NaN              NaN
-1  FEB 2021      NaN  ...             NaN              NaN
-2  MAR 2021      NaN  ...             NaN              NaN
-3  APR 2021      NaN  ...             NaN              NaN
-4  MAY 2021      NaN  ...             NaN              NaN
-5  JUN 2021      NaN  ...             NaN              0.0
-
-[6 rows x 8 columns], 'FTP11201':       month forecast  ...  CoberturaFinal  EstoquePolitica
-0  JAN 2021      NaN  ...             NaN              NaN
-1  FEB 2021      NaN  ...             NaN              NaN
-2  MAR 2021      NaN  ...             NaN              NaN
-3  APR 2021      NaN  ...             NaN              NaN
-4  MAY 2021      NaN  ...             NaN              NaN
-5  JUN 2021      NaN  ...             NaN              0.0
-
-[6 rows x 8 columns], 'F56B12A3':       month forecast  ...  CoberturaFinal  EstoquePolitica
-0  JAN 2021    752.0  ...        0.000458       941.000000
-1  FEB 2021    567.0  ...        0.000383       884.000000
-2  MAR 2021    951.0  ...        0.001399      1101.000000
-3  APR 2021    450.0  ...        0.000517       684.333333
-4  MAY 2021    703.0  ...        0.000810       954.000000
-5  JUN 2021    753.0  ...             NaN         0.000000
-
-[6 rows x 8 columns], 'F56B1201':       month forecast  ...  CoberturaFinal  EstoquePolitica
-0  JAN 2021     27.0  ...        0.003561        51.333333
-1  FEB 2021     73.0  ...        0.003063       112.666667
-2  MAR 2021    119.0  ...        0.104962       121.000000
-3  APR 2021      6.0  ...       -0.363612         5.666667
-4  MAY 2021     -1.0  ...             NaN              NaN
-5  JUN 2021      NaN  ...             NaN         0.000000
-
-[6 rows x 8 columns], 'F1251201':       month forecast  ...  CoberturaFinal  EstoquePolitica
-0  JAN 2021   2432.0  ...        0.000102      3284.000000
-1  FEB 2021   2556.0  ...        0.000081      4062.666667
-2  MAR 2021   4520.0  ...        0.000302      5216.000000
-3  APR 2021   2088.0  ...        0.000126      3051.666667
-4  MAY 2021   2891.0  ...        0.000184      3999.000000
-5  JUN 2021   3324.0  ...             NaN         0.000000
-
-[6 rows x 8 columns], 'F19D1207':       month forecast  ...  CoberturaFinal  EstoquePolitica
-0  JAN 2021     16.0  ...        0.000429       218.000000
-1  FEB 2021    606.0  ...        0.000357       946.333333
-2  MAR 2021   1021.0  ...        0.001974      1127.333333
-3  APR 2021    319.0  ...        0.000366       650.333333
-4  MAY 2021    994.0  ...        0.001321      1148.000000
-5  JUN 2021    462.0  ...             NaN         0.000000
-
-[6 rows x 8 columns], 'F1991207':       month forecast  ...  CoberturaFinal  EstoquePolitica
-0  JAN 2021    401.0  ...        0.000146       994.666667
-1  FEB 2021   1781.0  ...        0.000097      3036.333333
-2  MAR 2021   3766.0  ...        0.000387      4308.666667
-3  APR 2021   1628.0  ...        0.000149      2443.666667
-4  MAY 2021   2447.0  ...        0.000345      3036.000000
-5  JUN 2021   1767.0  ...             NaN         0.000000
-
-[6 rows x 8 columns], 'F1231201':       month forecast  ...  CoberturaFinal  EstoquePolitica
-0  JAN 2021   1976.0  ...        0.000134      2620.333333
-1  FEB 2021   1933.0  ...        0.000108      3058.333333
-2  MAR 2021   3376.0  ...        0.000537      3767.000000
-3  APR 2021   1173.0  ...        0.000160      1929.000000
-4  MAY 2021   2268.0  ...        0.000325      2894.666667
-5  JUN 2021   1880.0  ...             NaN         0.000000
-
-[6 rows x 8 columns], 'F7591201':       month forecast  ...  CoberturaFinal  EstoquePolitica
-0  JAN 2021   1531.0  ...        0.000043      3533.333333
-1  FEB 2021   6007.0  ...        0.000024     11176.333333
-2  MAR 2021  15508.0  ...        0.000217     16477.000000
-3  APR 2021   2907.0  ...        0.000042      5795.666667
-4  MAY 2021   8666.0  ...        0.000088     10967.666667
-5  JUN 2021   6905.0  ...             NaN         0.000000
-
-[6 rows x 8 columns], 'F6721201':       month forecast  ...  CoberturaFinal  EstoquePolitica
-0  JAN 2021      2.0  ...             NaN              NaN
-1  FEB 2021      NaN  ...             NaN              NaN
-2  MAR 2021      NaN  ...        0.314887              NaN
-3  APR 2021      2.0  ...        0.051945         4.333333
-4  MAY 2021      7.0  ...        0.610143         7.333333
-5  JUN 2021      1.0  ...             NaN         0.000000
-
-[6 rows x 8 columns], 'F54G1203':       month forecast  ...  CoberturaFinal  EstoquePolitica
-0  JAN 2021    820.0  ...        0.000095      1730.333333
-1  FEB 2021   2731.0  ...        0.000088      4112.333333
-2  MAR 2021   4144.0  ...        0.000214      5126.000000
-3  APR 2021   2946.0  ...        0.000152      3744.000000
-4  MAY 2021   2394.0  ...        0.000246      3221.000000
-5  JUN 2021   2481.0  ...             NaN         0.000000
-
-[6 rows x 8 columns], 'F19B1207':       month forecast  ...  CoberturaFinal  EstoquePolitica
-0  JAN 2021     43.0  ...        0.003823        65.666667
-1  FEB 2021     68.0  ...        0.001613       143.333333
-2  MAR 2021    226.0  ...        0.014646       240.333333
-3  APR 2021     43.0  ...        0.001616       118.000000
-4  MAY 2021    225.0  ...        0.002851       296.333333
-5  JUN 2021    214.0  ...             NaN         0.000000
-
-[6 rows x 8 columns], 'F75B1201':       month forecast  ...  CoberturaFinal  EstoquePolitica
-0  JAN 2021     47.0  ...        0.001538       103.333333
-1  FEB 2021    169.0  ...        0.000595       373.333333
-2  MAR 2021    613.0  ...        0.004373       661.000000
-3  APR 2021    144.0  ...        0.001102       254.000000
-4  MAY 2021    330.0  ...        0.001393       476.000000
-5  JUN 2021    438.0  ...             NaN         0.000000
-
-[6 rows x 8 columns], 'F1211201':       month forecast  ...  CoberturaFinal  EstoquePolitica
-0  JAN 2021    351.0  ...        0.000884       449.000000
-1  FEB 2021    294.0  ...        0.000513       531.000000
-2  MAR 2021    711.0  ...        0.005725       747.666667
-3  APR 2021    110.0  ...        0.001126       217.666667
-4  MAY 2021    323.0  ...        0.002761       396.666667
-5  JUN 2021    221.0  ...             NaN         0.000000
-
-[6 rows x 8 columns], 'F7541201':       month forecast  ...  CoberturaFinal  EstoquePolitica
-0  JAN 2021    381.0  ...        0.000311       660.000000
-1  FEB 2021    837.0  ...        0.000110      1944.666667
-2  MAR 2021   3323.0  ...        0.000871      3564.000000
-3  APR 2021    723.0  ...        0.000641       912.000000
-4  MAY 2021    567.0  ...        0.000447      1022.000000
-5  JUN 2021   1365.0  ...             NaN         0.000000
-
-[6 rows x 8 columns], 'F05512A1':       month forecast  ...  CoberturaFinal  EstoquePolitica
-0  JAN 2021   -161.0  ...        0.006190      -147.000000
-1  FEB 2021     42.0  ...        0.018222        48.666667
-2  MAR 2021     20.0  ...        0.629775        20.333333
-3  APR 2021      1.0  ...             inf         1.000000
-4  MAY 2021      0.0  ...       -0.046934        -4.333333
-5  JUN 2021    -13.0  ...             NaN         0.000000
-
-[6 rows x 8 columns], 'F0111201':       month forecast  ...  CoberturaFinal  EstoquePolitica
-0  JAN 2021    748.0  ...        0.000475       930.333333
-1  FEB 2021    547.0  ...        0.000308       941.333333
-2  MAR 2021   1183.0  ...        0.000904      1415.333333
-3  APR 2021    697.0  ...        0.000349      1044.000000
-4  MAY 2021   1041.0  ...        0.000880      1272.000000
-5  JUN 2021    693.0  ...             NaN         0.000000
-
-[6 rows x 8 columns], 'F6741201':       month forecast  ...  CoberturaFinal  EstoquePolitica
-0  JAN 2021      5.0  ...        0.259968         5.333333
-1  FEB 2021      1.0  ...        0.072888         2.666667
-2  MAR 2021      5.0  ...        0.125955         6.666667
-3  APR 2021      5.0  ...        0.036361         8.333333
-4  MAY 2021     10.0  ...        0.152536        11.333333
-5  JUN 2021      4.0  ...             NaN         0.000000
-
-[6 rows x 8 columns], 'F5151201':       month forecast  ...  CoberturaFinal  EstoquePolitica
-0  JAN 2021    333.0  ...        0.001176       406.666667
-1  FEB 2021    221.0  ...        0.001139       327.666667
-2  MAR 2021    320.0  ...       -0.005079       278.666667
-3  APR 2021   -124.0  ...        0.000735        41.000000
-4  MAY 2021    495.0  ...        0.040676       500.000000
-5  JUN 2021     15.0  ...             NaN         0.000000
-
-[6 rows x 8 columns], nan: Empty DataFrame
-Columns: []
-Index: []}
-
+      Meses Forecast
+0  JAN 2022   1122.0
+1  FEB 2022   1180.0
+2  MAR 2022   1622.0
+3  APR 2022   1015.0
+4  MAY 2022   1200.0
+5  JUN 2022   1432.0
+      Meses Forecast
+0  JAN 2022      0.0
+1  FEB 2022     50.0
+2  MAR 2022     20.0
+3  APR 2022     50.0
+4  MAY 2022      0.0
+5  JUN 2022     50.0
+      Meses Forecast
+0  JAN 2022    266.0
+1  FEB 2022    229.0
+2  MAR 2022    262.0
+3  APR 2022    178.0
+4  MAY 2022    232.0
+5  JUN 2022    260.0
+      Meses Forecast
+0  JAN 2022   1908.0
+1  FEB 2022   1511.0
+2  MAR 2022   2053.0
+3  APR 2022   1673.0
+4  MAY 2022   1838.0
+5  JUN 2022   1771.0
+      Meses Forecast
+0  JAN 2022   2858.0
+1  FEB 2022   2755.0
+2  MAR 2022   4034.0
+3  APR 2022   3078.0
+4  MAY 2022   3314.0
+5  JUN 2022   3394.0
+      Meses Forecast
+0  JAN 2022   2155.0
+1  FEB 2022   2104.0
+2  MAR 2022   4334.0
+3  APR 2022   2170.0
+4  MAY 2022   1991.0
+5  JUN 2022   1874.0
+      Meses Forecast
+0  JAN 2022    143.0
+1  FEB 2022    196.0
+2  MAR 2022    406.0
+3  APR 2022    181.0
+4  MAY 2022    160.0
+5  JUN 2022    165.0
+      Meses Forecast
+0  JAN 2022    441.0
+1  FEB 2022    525.0
+2  MAR 2022   1195.0
+3  APR 2022    485.0
+4  MAY 2022    468.0
+5  JUN 2022    390.0
+      Meses Forecast
+0  JAN 2022      NaN
+1  FEB 2022      NaN
+2  MAR 2022      NaN
+3  APR 2022      NaN
+4  MAY 2022      NaN
+5  JUN 2022      NaN
+      Meses Forecast
+0  JAN 2022   2417.0
+1  FEB 2022   3109.0
+2  MAR 2022   4420.0
+3  APR 2022   2548.0
+4  MAY 2022   3190.0
+5  JUN 2022   2718.0
+      Meses Forecast
+0  JAN 2022   5160.0
+1  FEB 2022   5850.0
+2  MAR 2022  13100.0
+3  APR 2022   5180.0
+4  MAY 2022   6405.0
+5  JUN 2022   5576.0
+      Meses Forecast
+0  JAN 2022      NaN
+1  FEB 2022      NaN
+2  MAR 2022      NaN
+3  APR 2022      NaN
+4  MAY 2022      NaN
+5  JUN 2022      NaN
+      Meses Forecast
+0  JAN 2022    500.0
+1  FEB 2022    601.0
+2  MAR 2022    908.0
+3  APR 2022    570.0
+4  MAY 2022    645.0
+5  JUN 2022    702.0
+      Meses Forecast
+0  JAN 2022      3.0
+1  FEB 2022      5.0
+2  MAR 2022     10.0
+3  APR 2022      5.0
+4  MAY 2022      5.0
+5  JUN 2022      5.0
+      Meses Forecast
+0  JAN 2022     12.0
+1  FEB 2022     12.0
+2  MAR 2022     15.0
+3  APR 2022     10.0
+4  MAY 2022     10.0
+5  JUN 2022      8.0
+      Meses Forecast
+0  JAN 2022    413.0
+1  FEB 2022   1050.0
+2  MAR 2022   2470.0
+3  APR 2022   1167.0
+4  MAY 2022   1282.0
+5  JUN 2022   1043.0
+      Meses Forecast
+0  JAN 2022   5495.0
+1  FEB 2022   7494.0
+2  MAR 2022  13220.0
+3  APR 2022   6852.0
+4  MAY 2022   8369.0
+5  JUN 2022   7713.0
+      Meses Forecast
+0  JAN 2022    234.0
+1  FEB 2022    378.0
+2  MAR 2022    566.0
+3  APR 2022    262.0
+4  MAY 2022    293.0
+5  JUN 2022    210.0
+      Meses Forecast
+0  JAN 2022    653.0
+1  FEB 2022   1491.0
+2  MAR 2022   2483.0
+3  APR 2022   1211.0
+4  MAY 2022   1373.0
+5  JUN 2022   1219.0
+      Meses Forecast
+0  JAN 2022    181.0
+1  FEB 2022    165.0
+2  MAR 2022    274.0
+3  APR 2022    213.0
+4  MAY 2022    242.0
+5  JUN 2022    255.0
+      Meses Forecast
+0  JAN 2022      0.0
+1  FEB 2022      0.0
+2  MAR 2022      0.0
+3  APR 2022      0.0
+4  MAY 2022      0.0
+5  JUN 2022      0.0
+      Meses Forecast
+0  JAN 2022   4204.0
+1  FEB 2022   6175.0
+2  MAR 2022  10319.0
+3  APR 2022   6019.0
+4  MAY 2022   4987.0
+5  JUN 2022  19675.0
+      Meses Forecast
+0  JAN 2022    873.0
+1  FEB 2022   1140.0
+2  MAR 2022   1982.0
+3  APR 2022   1109.0
+4  MAY 2022   1128.0
+5  JUN 2022   1190.0
+      Meses Forecast
+0  JAN 2022      6.0
+1  FEB 2022      7.0
+2  MAR 2022      8.0
+3  APR 2022      9.0
+4  MAY 2022     10.0
+5  JUN 2022     12.0
