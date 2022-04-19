@@ -2,6 +2,7 @@ from cmath import nan
 from datetime import date, datetime, timedelta
 import math
 from operator import index
+from tracemalloc import start
 from matplotlib.pyplot import axes, axis
 import pandas as pd
 import regexes
@@ -105,8 +106,20 @@ class Medicamentos:
             df[key] = pd.DataFrame()
         
         indexes = list(self.df_forecast.columns) # Lista de colunas da planilha Forecast
+        JDA_Cols = list(self.df_jda.columns)
 
         #print(indexes)
+        #print(JDA_Cols)
+
+        beginning = 0
+        limit = 0
+        for i in range(len(indexes)):        
+            if indexes[i] == month:
+                beginning = i
+                if beginning + 6 > len(indexes):
+                    limit = len(indexes)
+                else:
+                    limit = beginning + 6
 
         for i in range(len(self.df_forecast)):
 
@@ -115,24 +128,39 @@ class Medicamentos:
             if code in codes:
 
                 forecast = self.df_forecast.loc[i]
-            
-                beginning = 0
-                limit = 0
-                for i in range(len(indexes)):
-                    
-                    if indexes[i] == month:
-                        beginning = i
-                        if beginning + 6 > len(indexes):
-                            limit = len(indexes)
-                        else:
-                            limit = beginning + 6
-                
+   
                 df[code]['Meses'] = indexes[beginning:limit]
                 df[code]['Forecast'] = forecast[list(df[code]['Meses'])].values
                 
                 
-                print(df[code])
-                    
+                #print(df[code])
+
+        for i in range(len(self.df_jda)):
+            code = self.df_jda.loc[i, 'Item']
+            
+            if code in codes:
+                
+                entrada = pd.Series(data=np.zeros((1,len(indexes[beginning:limit])))[0],index=indexes[beginning:limit])
+                
+                #print(entrada)
+                startColumn = None
+                for d in JDA_Cols[15:]:
+                    r = re.search(r'[0-9][0-9]\.[0-9][0-9]\.[0-9][0-9]', d)
+                    rStr = ''
+                    if r != None:
+                        rStr = r.group().replace(".", "/")
+                        dateObj = datetime.strptime(rStr, "%d/%m/%y")
+                        rStr = dateObj.strftime("%b %Y").upper()
+
+                    if rStr == month:
+                        startColumn = d 
+                        break
+                tempSeries = self.df_jda.loc[i]
+                tempSeries = tempSeries[JDA_Cols[JDA_Cols.index(startColumn):]].index
+                print(tempSeries)
+
+                        #print(rStr)
+
 
 
 
@@ -158,4 +186,4 @@ class Medicamentos:
 
 
 x = Medicamentos(sheets)
-x.calcular('JAN 2022', 39)
+x.calcular('APR 2022', 39)
