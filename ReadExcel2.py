@@ -2,8 +2,8 @@ from cmath import nan
 from datetime import date, datetime, timedelta
 import math
 from operator import index
-from tracemalloc import start
-from matplotlib.pyplot import axes, axis
+#from tracemalloc import start
+#from matplotlib.pyplot import axes, axis
 import pandas as pd
 import regexes
 import sys
@@ -131,7 +131,8 @@ class Medicamentos:
    
                 df[code]['Meses'] = indexes[beginning:limit]
                 df[code]['Forecast'] = forecast[list(df[code]['Meses'])].values
-                
+
+                df[code]['Entrada'] = df[code].apply(lambda x: 0, axis = 1)
                 
                 #print(df[code])
 
@@ -141,8 +142,8 @@ class Medicamentos:
             if code in codes:
                 
                 entrada = pd.Series(data=np.zeros((1,len(indexes[beginning:limit])))[0],index=indexes[beginning:limit])
-                
                 #print(entrada)
+
                 startColumn = None
                 for d in JDA_Cols[15:]:
                     r = re.search(r'[0-9][0-9]\.[0-9][0-9]\.[0-9][0-9]', d)
@@ -155,11 +156,27 @@ class Medicamentos:
                     if rStr == month:
                         startColumn = d 
                         break
-                tempSeries = self.df_jda.loc[i]
-                tempSeries = tempSeries[JDA_Cols[JDA_Cols.index(startColumn):]].index
-                print(tempSeries)
 
-                        #print(rStr)
+                tempSeries = self.df_jda.loc[i]
+                jdaBeginning = JDA_Cols.index(startColumn)
+                jdaLimit = jdaBeginning + 6 if jdaBeginning + 6 < len(JDA_Cols) else len(JDA_Cols)
+                tempSeries = tempSeries[JDA_Cols[jdaBeginning:jdaLimit]]
+                #entrada = 
+                #print(tempSeries.values)
+
+                for index, m in enumerate(entrada):
+                    #print(index,'-', m, '-', list(entrada.index)[index])
+                    m_ = re.search(r'[0-9][0-9]\.[0-9][0-9]\.[0-9][0-9]', str(list(tempSeries.index)[index]))#.group()
+                    if m_ != None:
+                        m_ = m_.group().replace(".", "/")
+                        dateObj_ = datetime.strptime(m_, "%d/%m/%y")
+                        m_ = dateObj_.strftime("%b %Y").upper()
+                        entrada[m_] = tempSeries[list(tempSeries.index)[index]]
+                        #str(w).replace(',', '').isdigit()
+                        #print(entrada(m_))
+                #print(tempSeries)
+                print(entrada)
+
 
 
 
