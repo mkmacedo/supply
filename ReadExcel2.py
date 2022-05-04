@@ -210,7 +210,13 @@ class Medicamentos:
                             df[key].at[i, 'EstoqueFinal'] = df[key].at[i, 'EstoqueInicial'] + df[key].at[i, 'Entrada'] - self.d[key].get('Colocado')
 
                         try:
-                            df[key].at[i, 'CoberturaInicial'] =  '{:.2%}'.format(eInicial[1]/df[key].at[i, 'Forecast'])
+                            df[key].at[i, 'CoberturaInicial'] =  '{:.2%}'.format(eInicial[1]/df[key].at[i, 'Forecast'])       
+                        except:
+                            pass
+                        
+                        try:
+                            df[key].at[i, 'CoberturaFinal'] = '{:.2%}'.format(df[key].at[i, 'EstoqueFinal'] / df[key].at[i+1, 'Forecast'])
+
                         except:
                             pass
                         
@@ -226,7 +232,11 @@ class Medicamentos:
 
                     try:
                         df[key].at[i, 'CoberturaInicial'] =  '{:.2%}'.format(df[key].at[i, 'EstoqueInicial']/df[key].at[i, 'Forecast'])
-                        
+                    except:
+                        pass
+
+                    try:
+                        df[key].at[i, 'CoberturaFinal'] = '{:.2%}'.format(df[key].at[i, 'EstoqueFinal'] / df[key].at[i+1, 'Forecast'])
                     except:
                         pass
 
