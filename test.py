@@ -6,3 +6,10 @@ print(a.index(3))
 
 print(b.index("d")) 
 print(np.zeros((1,6)))
+
+print(eval('-8') + 1)
+
+
+#CommitIntransIn
+#ActualIntransIn
+#RecArriv

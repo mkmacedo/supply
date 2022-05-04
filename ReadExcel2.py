@@ -1,5 +1,6 @@
 from cmath import nan
 from datetime import date, datetime, timedelta
+from icecream import ic
 import math
 from operator import index
 #from tracemalloc import start
@@ -33,7 +34,7 @@ class Medicamentos:
 
         self.d = {}
 
-    def calcular(self, month, estoque_inicial=None):
+    def calcular(self, month, eInicial=(None, None)):
 
         material = self.df_estoque_all['Material No']
         material = material.unique()
@@ -108,9 +109,6 @@ class Medicamentos:
         indexes = list(self.df_forecast.columns) # Lista de colunas da planilha Forecast
         JDA_Cols = list(self.df_jda.columns)
 
-        #print(indexes)
-        #print(JDA_Cols)
-
         beginning = 0
         limit = 0
         for i in range(len(indexes)):        
@@ -130,72 +128,115 @@ class Medicamentos:
                 forecast = self.df_forecast.loc[i]
    
                 df[code]['Meses'] = indexes[beginning:limit]
+
                 df[code]['Forecast'] = forecast[list(df[code]['Meses'])].values
 
-                df[code]['Entrada'] = df[code].apply(lambda x: 0, axis = 1)
+                df[code]['Entrada'] = df[code].apply(lambda x: 0., axis = 1)
+
+                df[code]['EstoqueInicial'] = df[code].apply(lambda x: 0., axis = 1)
+
+                df[code]['EstoqueFinal'] = df[code].apply(lambda x: 0., axis = 1)
+
+                df[code]['CoberturaInicial'] = df[code].apply(lambda x: '0.0%', axis = 1)
+
+                df[code]['CoberturaFinal'] = df[code].apply(lambda x: '0.0%', axis = 1)
                 
                 #print(df[code])
 
         for i in range(len(self.df_jda)):
-            code = self.df_jda.loc[i, 'Item']
+
+            if self.df_jda.loc[i,'Projection Columns'] in ['CommitIntransIn', 'ActualIntransIn', 'RecArriv']:
+
+                code = self.df_jda.loc[i, 'Item']
+                
+                if code in codes:
+                    
+                    entrada = pd.Series(data=np.zeros((1,len(indexes[beginning:limit])))[0],index=indexes[beginning:limit])
+                    #print(entrada)
+
+                    startColumn = None
+                    for d in JDA_Cols[15:]:
+                        r = re.search(r'[0-9][0-9]\.[0-9][0-9]\.[0-9][0-9]', d)
+                        rStr = ''
+                        if r != None:
+                            rStr = r.group().replace(".", "/")
+                            dateObj = datetime.strptime(rStr, "%d/%m/%y")
+                            rStr = dateObj.strftime("%b %Y").upper()
+
+                        if rStr == month:
+                            startColumn = d 
+                            break
+
+                    tempSeries = self.df_jda.loc[i]
+                    jdaBeginning = JDA_Cols.index(startColumn)
+                    jdaLimit = jdaBeginning + 6 if jdaBeginning + 6 < len(JDA_Cols) else len(JDA_Cols)
+                    tempSeries = tempSeries[JDA_Cols[jdaBeginning:jdaLimit]]
+
+                    for index, _ in enumerate(entrada):
+                        #print(index,'-', m, '-', list(entrada.index)[index])
+                        m = re.search(r'[0-9][0-9]\.[0-9][0-9]\.[0-9][0-9]', str(list(tempSeries.index)[index]))#.group()
+                        if m != None:
+                            m = m.group().replace(".", "/")
+                            dateObj_ = datetime.strptime(m, "%d/%m/%y")
+                            m = dateObj_.strftime("%b %Y").upper()
+                            entrada[m] = tempSeries[list(tempSeries.index)[index]]
+
+                    #print(tempSeries)
+                    #print(entrada)
+                    for index, v in enumerate(df[code]['Entrada']):
+
+                        val = str(entrada[list(entrada.index)[index]])
+                        if val.replace(',', '').replace('.', '').replace('-', '').isdigit():
+                            val = eval(val.replace(',', ''))
+
+                        if type(val) == type(1.0) or type(val) == type(1):
+                            
+                            df[code].at[index,'Entrada'] += val
+                        #print(df[code].at[index,'Entrada'])
+                        #print(index,v)
+                    #print(df[code])
+        #print(df)
+
+        for key in list(df.keys()): #Percorrendo DataFrames em df
+            #print(key)
+            for i in range(len(df[key])):
+                
+                if i == 0:# and eInicial[0] == key:
+                    if self.d.get(key) != None:# and eInicial[0] == key:
+                        df[key].at[i, 'EstoqueInicial'] = eInicial[1]
+                        if df[key].at[i, 'Forecast'] > self.d[key].get('Colocado'):
+                            df[key].at[i, 'EstoqueFinal'] = df[key].at[i, 'EstoqueInicial'] + df[key].at[i, 'Entrada'] - df[key].at[i, 'Forecast']
+                        else:
+                            df[key].at[i, 'EstoqueFinal'] = df[key].at[i, 'EstoqueInicial'] + df[key].at[i, 'Entrada'] - self.d[key].get('Colocado')
+
+                        try:
+                            df[key].at[i, 'CoberturaInicial'] =  '{:.2%}'.format(eInicial[1]/df[key].at[i, 'Forecast'])
+                        except:
+                            pass
+                        
+                elif eInicial[0] == key or eInicial[0] != None:
+                    #print('ENTROYU')
+                    #print(i)
+                    #print(df[key].at[i - 1, 'EstoqueFinal']) #mudar)
+                    try:
+                        df[key].at[i, 'EstoqueInicial'] = df[key].at[i - 1, 'EstoqueFinal'] #mudar
+                        df[key].at[i, 'EstoqueFinal'] = df[key].at[i, 'EstoqueInicial'] + df[key].at[i, 'Entrada'] - df[key].at[i, 'Forecast']
+                    except:
+                        pass
+
+                    try:
+                        df[key].at[i, 'CoberturaInicial'] =  '{:.2%}'.format(df[key].at[i, 'EstoqueInicial']/df[key].at[i, 'Forecast'])
+                        
+                    except:
+                        pass
+
+            print(key)
+            print(df[key])
+            #print(df[key][['Forecast', 'EstoqueInicial', 'CoberturaInicial']])
             
-            if code in codes:
-                
-                entrada = pd.Series(data=np.zeros((1,len(indexes[beginning:limit])))[0],index=indexes[beginning:limit])
-                #print(entrada)
-
-                startColumn = None
-                for d in JDA_Cols[15:]:
-                    r = re.search(r'[0-9][0-9]\.[0-9][0-9]\.[0-9][0-9]', d)
-                    rStr = ''
-                    if r != None:
-                        rStr = r.group().replace(".", "/")
-                        dateObj = datetime.strptime(rStr, "%d/%m/%y")
-                        rStr = dateObj.strftime("%b %Y").upper()
-
-                    if rStr == month:
-                        startColumn = d 
-                        break
-
-                tempSeries = self.df_jda.loc[i]
-                jdaBeginning = JDA_Cols.index(startColumn)
-                jdaLimit = jdaBeginning + 6 if jdaBeginning + 6 < len(JDA_Cols) else len(JDA_Cols)
-                tempSeries = tempSeries[JDA_Cols[jdaBeginning:jdaLimit]]
-                #entrada = 
-                #print(tempSeries.values)
-
-                for index, m in enumerate(entrada):
-                    #print(index,'-', m, '-', list(entrada.index)[index])
-                    m_ = re.search(r'[0-9][0-9]\.[0-9][0-9]\.[0-9][0-9]', str(list(tempSeries.index)[index]))#.group()
-                    if m_ != None:
-                        m_ = m_.group().replace(".", "/")
-                        dateObj_ = datetime.strptime(m_, "%d/%m/%y")
-                        m_ = dateObj_.strftime("%b %Y").upper()
-                        entrada[m_] = tempSeries[list(tempSeries.index)[index]]
-                        #str(w).replace(',', '').isdigit()
-                        #print(entrada(m_))
-                #print(tempSeries)
-                print(entrada)
-
-
-
-
-
-#                monthFlag = False
-#                numCols = len(cols)
-#                lim = 0
-#                j = 0
-#                for j in range(numCols):
-#                    if cols[j] == month and monthFlag == False:
-#                        monthFlag = True
-#                        if j + 6 <= numCols:
-#                            lim = j + 6
-#                        else:
-#                            lim = numCols
-#                        break
-                
-
-
+            #FN151201
+            #F75D1201
+            #FN131201
 
             #print(df[key].head())
         #print(df)
@@ -203,4 +244,4 @@ class Medicamentos:
 
 
 x = Medicamentos(sheets)
-x.calcular('APR 2022', 39)
+x.calcular('APR 2022', ('FN151201', 39))
