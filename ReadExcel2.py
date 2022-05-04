@@ -10,6 +10,7 @@ import regexes
 import sys
 import numpy as np
 import re
+import traceback
 
 
 
@@ -31,10 +32,13 @@ class Medicamentos:
         self.df_colocado = pd.read_excel(sheets[5].strip())
         self.df_biotech = pd.read_excel(sheets[6].strip())
         self.df_jda = pd.read_excel(sheets[7].strip())
+        drp = pd.ExcelFile(sheets[6].strip())
+        self.df_drp = pd.read_excel(drp, 'DRP+SS')
 
         self.d = {}
 
     def calcular(self, month, eInicial=(None, None)):
+        print(self.df_drp[['*Item', 'SS (min)']])
 
         material = self.df_estoque_all['Material No']
         material = material.unique()
@@ -140,6 +144,8 @@ class Medicamentos:
                 df[code]['CoberturaInicial'] = df[code].apply(lambda x: '0.0%', axis = 1)
 
                 df[code]['CoberturaFinal'] = df[code].apply(lambda x: '0.0%', axis = 1)
+
+                df[code]['EstoquePolitica'] = df[code].apply(lambda x: '0.0', axis = 1)
                 
                 #print(df[code])
 
@@ -198,6 +204,17 @@ class Medicamentos:
         #print(df)
 
         for key in list(df.keys()): #Percorrendo DataFrames em df
+            epFactor = 0 
+
+            for j in range(len(self.df_drp)):
+                if self.df_drp.at[j, '*Item'] == key:
+                    try:
+                        ss_value = self.df_drp.at[j, 'SS (min)']/30 - 1
+                        epFactor = ss_value if ss_value > 0 else 0
+                    except:
+                        #traceback.print_exc()
+                        pass
+
             #print(key)
             for i in range(len(df[key])):
                 
@@ -217,6 +234,11 @@ class Medicamentos:
                         try:
                             df[key].at[i, 'CoberturaFinal'] = '{:.2%}'.format(df[key].at[i, 'EstoqueFinal'] / df[key].at[i+1, 'Forecast'])
 
+                        except:
+                            pass
+
+                        try:
+                            df[key].at[i, 'EstoquePolitica'] = df[key].at[i, 'Forecast'] + df[key].at[i + 1, 'Forecast']*epFactor
                         except:
                             pass
                         
@@ -239,6 +261,12 @@ class Medicamentos:
                         df[key].at[i, 'CoberturaFinal'] = '{:.2%}'.format(df[key].at[i, 'EstoqueFinal'] / df[key].at[i+1, 'Forecast'])
                     except:
                         pass
+                    
+                    try:
+                        df[key].at[i, 'EstoquePolitica'] = df[key].at[i, 'Forecast'] + df[key].at[i + 1, 'Forecast']*epFactor
+                    except:
+                        pass
+
 
             print(key)
             print(df[key])
