@@ -38,12 +38,12 @@ class Medicamentos:
         self.d = {}
 
     def calcular(self, month, eInicial=(None, None)):
-        print(self.df_drp[['*Item', 'SS (min)']])
+        #print(self.df_drp[['*Item', 'SS (min)']])
 
         material = self.df_estoque_all['Material No']
         material = material.unique()
 
-        test = {}
+        #test = {}
         
         for f in material:
 
@@ -99,6 +99,42 @@ class Medicamentos:
 
                     limit = self.d[f]['Batch'][str(self.df_estoque_all.loc[i, 'Batch'])]['Shelf life'][0].date() - timedelta(days=30*12)
                     self.d[f]['Batch'][str(self.df_estoque_all.loc[i, 'Batch'])]['Limit sales date'] = (limit, limit.strftime('%Y-%m-%d'))
+
+
+
+            #Produtos (Linhas roxas)
+            for i in range(len(self.df_produtos)):
+
+                if str(self.df_produtos.loc[i, 'Código']) == f:
+
+                    #test[str(self.df_estoque_all.loc[i, 'Material No'])] = self.df_estoque_all.loc[i]
+
+
+                    if self.d[f]['Batch'].get(str(self.df_produtos.loc[i, 'Batch'])) == None:
+                        if self.d[f].get('batchAbaProdutos') == None:
+                            self.d[f]['batchAbaProdutos'] = {}
+
+                        if self.d[f]['batchAbaProdutos'].get(str(self.df_produtos.loc[i, 'Batch'])) == None:
+                            self.d[f]['batchAbaProdutos'][str(self.df_produtos.loc[i, 'Batch'])] = {}
+                    
+                        if self.d[f]['batchAbaProdutos'][str(self.df_produtos.loc[i, 'Batch'])].get('Stock Amount') == None:
+                            self.d[f]['batchAbaProdutos'][str(self.df_produtos.loc[i, 'Batch'])]['Stock Amount'] = self.df_produtos.loc[i, 'Amount']
+                        else:
+                            self.d[f]['batchAbaProdutos'][str(self.df_produtos.loc[i, 'Batch'])]['Stock Amount'] += self.df_produtos.loc[i, 'Amount']
+                        #print(self.df_produtos.loc[i, 'Amount'], self.d[f]['Batch'][str(self.df_produtos.loc[i, 'Batch'])]['Stock Amount'])
+                        self.d[f]['batchAbaProdutos'][str(self.df_produtos.loc[i, 'Batch'])]['Plant'] = ''
+                        self.d[f]['batchAbaProdutos'][str(self.df_produtos.loc[i, 'Batch'])]['Batch status key'] = ''
+
+                        #Expiration date
+                        self.d[f]['batchAbaProdutos'][str(self.df_produtos.loc[i, 'Batch'])]['Shelf life'] = (self.df_produtos.loc[i, 'Validade'], self.df_produtos.loc[i, 'Validade'].strftime('%Y-%m-%d'))
+
+                        #days (timedelta)
+                        delta = str(date.today() - self.d[f]['batchAbaProdutos'][str(self.df_produtos.loc[i, 'Batch'])]['Shelf life'][0].date())
+                        self.d[f]['batchAbaProdutos'][str(self.df_produtos.loc[i, 'Batch'])]['Days'] = eval(delta[:delta.find(' days')]) if delta.find(' days') != -1 else eval(delta[:delta.find(' day')]) if delta.find(' day') != -1 else 0
+                        self.d[f]['batchAbaProdutos'][str(self.df_produtos.loc[i, 'Batch'])]['Month'] = float('{:.1f}'.format(eval(delta[:delta.find(' days')])/30)) if delta.find(' days') != -1 else float('{:.1f}'.format(eval(delta[:delta.find(' day')])/30)) if delta.find(' day') != -1 else 0
+
+                        limit = self.d[f]['batchAbaProdutos'][str(self.df_produtos.loc[i, 'Batch'])]['Shelf life'][0].date() - timedelta(days=30*12)
+                        self.d[f]['batchAbaProdutos'][str(self.df_produtos.loc[i, 'Batch'])]['Limit sales date'] = (limit, limit.strftime('%Y-%m-%d'))
 
 
 
@@ -280,9 +316,14 @@ class Medicamentos:
             
 
 
-            print(key)
-            print(df[key])
+            #print(key)
+            #print(df[key])
             #print(df[key][['Forecast', 'EstoqueInicial', 'CoberturaInicial']])
+            #print(self.d)
+            for key in list(self.d.keys()):
+                print(key, '--', self.d[key])
+                print()
+                print()
             
             #FN151201
             #F75D1201

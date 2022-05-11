@@ -1,15 +1,20 @@
-import numpy as np
-
-a = [1,5,2,3,4]
-b = ['a', 'b', 'c','d','e','o','t','f']
-print(a.index(3))
-
-print(b.index("d")) 
-print(np.zeros((1,6)))
-
-print(eval('-8') + 1)
+import pandas as pd
 
 
-#CommitIntransIn
-#ActualIntransIn
-#RecArriv
+df = pd.read_excel('Aba Produtos - lotes em trânsito (planilha da rede)(1).xlsx')
+print(df.head())
+
+cols = [
+'Código',
+'Batch',
+'Amount',
+'Validade',
+'Chegada Merck',
+'Recebimento \nBTG',
+'Previsão Liberação Lote',
+]
+
+df = df[cols]
+print(df.head())
+for i in range(len(df)):
+    print(type(df.loc[i, 'Validade']))
