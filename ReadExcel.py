@@ -2,7 +2,6 @@ from cmath import nan
 from datetime import date, datetime, timedelta
 import math
 from operator import index
-from matplotlib.pyplot import axes, axis
 import pandas as pd
 import regexes
 import sys
