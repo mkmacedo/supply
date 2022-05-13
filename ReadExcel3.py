@@ -320,16 +320,113 @@ class Medicamentos:
             #print(df[key])
             #print(df[key][['Forecast', 'EstoqueInicial', 'CoberturaInicial']])
             #print(self.d)
-            for key in list(self.d.keys()):
-                print(key, '--', self.d[key])
-                print()
-                print()
-            
-            #FN151201
-            #F75D1201
-            #FN131201
+        df_table = None
+        for key in list(self.d.keys()):
+            print(key, '--', self.d[key])
+            batchList = []
+            stockAmountList = []
+            plantList = []
+            batchStatusKeyList = []
+            shelfLifeList = []
+            daysList = []
+            monthsList = []
+            limitSalesDateList = []
 
-            #print(df[key].head())
+            #lgth = len(self.d[key].get('Batch'))
+            #if self.d[key].get('batchAbaProdutos') != None:
+            #    lgth += len(self.d[key].get('batchAbaProdutos'))
+            #print(lgth)
+            for batchKey in list(self.d[key]['Batch']):
+
+                batchList.append(batchKey)
+
+                stockAmount = self.d[key]['Batch'][batchKey].get('Stock Amount')
+                stockAmountList.append(stockAmount)
+
+                plant = self.d[key]['Batch'][batchKey].get('Plant')
+                plantList.append(plant)
+
+                batchStatusKey = self.d[key]['Batch'][batchKey].get('Batch status key')
+                batchStatusKeyList.append(batchStatusKey)
+
+                shelfLife = self.d[key]['Batch'][batchKey].get('Shelf life')
+                shelfLifeList.append(shelfLife)
+
+                days = self.d[key]['Batch'][batchKey].get('Days')
+                daysList.append(days)
+
+                months = self.d[key]['Batch'][batchKey].get('Month')
+                monthsList.append(months)
+
+                limitSalesDate = self.d[key]['Batch'][batchKey].get('Limit sales date')
+                limitSalesDateList.append(limitSalesDate)
+
+            if self.d[key].get('batchAbaProdutos') != None:
+                for batchKey in list(self.d[key]['batchAbaProdutos']):
+
+                    batchList.append(batchKey)
+
+                    stockAmount = self.d[key]['batchAbaProdutos'][batchKey].get('Stock Amount')
+                    stockAmountList.append(stockAmount)
+
+                    plant = self.d[key]['batchAbaProdutos'][batchKey].get('Plant')
+                    plantList.append(plant)
+
+                    batchStatusKey = self.d[key]['batchAbaProdutos'][batchKey].get('Batch status key')
+                    batchStatusKeyList.append(batchStatusKey)
+
+                    shelfLife = self.d[key]['batchAbaProdutos'][batchKey].get('Shelf life')
+                    shelfLifeList.append(shelfLife)
+
+                    days = self.d[key]['batchAbaProdutos'][batchKey].get('Days')
+                    daysList.append(days)
+
+                    months = self.d[key]['batchAbaProdutos'][batchKey].get('Month')
+                    monthsList.append(months)
+
+                    limitSalesDate = self.d[key]['batchAbaProdutos'][batchKey].get('Limit sales date')
+                    limitSalesDateList.append(limitSalesDate)
+
+            #print(batchList)
+            #print(stockAmountList)
+            #print(plantList)
+            #print(batchStatusKeyList)
+            #print(daysList)
+            #print(monthsList)
+            #print(limitSalesDateList)
+            lgth = len(batchList)
+            productList = [key]*lgth
+            #print(productList)
+
+            if len(batchList) != len(stockAmountList) and len(batchList) != len(limitSalesDateList):
+                print('FALSE')
+            #print()
+            #print()
+
+            d = {
+                    'Material No': productList,
+                    'Batch': batchList,
+                    'Stock Amount': stockAmountList, 
+                    'Shelf Life': shelfLifeList,
+                    'Days': daysList,
+                    'Month': monthsList,
+                    'Limit Sales Date': limitSalesDateList,
+                    'BSK': batchStatusKeyList
+                    }
+            df_table = pd.DataFrame(data=d)
+            print(df_table)
+#            if type(df_table) == type(None):
+#                df_table = pd.DataFrame(data=d)
+#            else:
+#                df_table.append(pd.DataFrame(data=d))
+
+    
+        #FN151201
+        #F75D1201
+        #FN131201
+
+        #print(df[key].head())
+        print(df_table)
         #print(df)
 
 
