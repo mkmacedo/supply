@@ -43,7 +43,7 @@ class Medicamentos:
         material = self.df_estoque_all['Material No']
         material = material.unique()
 
-        #test = {}
+        df_provisioning = None
         
         for f in material:
 
@@ -166,6 +166,8 @@ class Medicamentos:
             if code in codes:
 
                 forecast = self.df_forecast.loc[i]
+
+                df[code]['Material No'] = [code] * (limit - beginning)
    
                 df[code]['Meses'] = indexes[beginning:limit]
 
@@ -320,9 +322,16 @@ class Medicamentos:
             #print(df[key])
             #print(df[key][['Forecast', 'EstoqueInicial', 'CoberturaInicial']])
             #print(self.d)
+            if type(df_provisioning) == type(None):
+                df_provisioning = df[key]
+            else:
+                df_provisioning = df_provisioning.append(df[key], ignore_index=True)
+
+            df_provisioning.to_excel('planlha_supply2.xlsx')
+        #tables = []
         df_table = None
         for key in list(self.d.keys()):
-            print(key, '--', self.d[key])
+            #print(key, '--', self.d[key])
             batchList = []
             stockAmountList = []
             plantList = []
@@ -331,6 +340,7 @@ class Medicamentos:
             daysList = []
             monthsList = []
             limitSalesDateList = []
+            blockedList = []
 
             #lgth = len(self.d[key].get('Batch'))
             #if self.d[key].get('batchAbaProdutos') != None:
@@ -396,6 +406,7 @@ class Medicamentos:
             #print(limitSalesDateList)
             lgth = len(batchList)
             productList = [key]*lgth
+            blockedList = [0]*lgth
             #print(productList)
 
             if len(batchList) != len(stockAmountList) and len(batchList) != len(limitSalesDateList):
@@ -411,14 +422,16 @@ class Medicamentos:
                     'Days': daysList,
                     'Month': monthsList,
                     'Limit Sales Date': limitSalesDateList,
-                    'BSK': batchStatusKeyList
+                    'BSK': batchStatusKeyList,
+                    'Blocked': blockedList
                     }
-            df_table = pd.DataFrame(data=d)
-            print(df_table)
-#            if type(df_table) == type(None):
-#                df_table = pd.DataFrame(data=d)
-#            else:
-#                df_table.append(pd.DataFrame(data=d))
+            #df_table = pd.DataFrame(data=d)
+            #tables.append(df_table)
+            #print(df_table[['Batch', 'Days']])
+            if type(df_table) == type(None):
+                df_table = pd.DataFrame(data=d)
+            else:
+                df_table = df_table.append(pd.DataFrame(data=d), ignore_index=True)
 
     
         #FN151201
@@ -427,7 +440,17 @@ class Medicamentos:
 
         #print(df[key].head())
         print(df_table)
-        #print(df)
+        df_table.to_excel('planilha_supply1.xlsx')
+        #print(tables)
+        #df_final = tables[0]
+        #print(df_final.columns)
+        #print(tables[1].columns)
+        #df_final = df_final.append(tables[1])
+        #print(df_final)
+
+        #for t in tables[1:]:
+        #    df_final.append(t)
+        #print(df_final)
 
 
 
