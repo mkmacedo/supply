@@ -84,6 +84,14 @@ class Medicamentos:
                     self.d[f]['Batch'][str(self.df_estoque_all.loc[i, 'Batch'])]['Plant'] = str(self.df_estoque_all.loc[i, 'Plant'])
                     self.d[f]['Batch'][str(self.df_estoque_all.loc[i, 'Batch'])]['Batch status key'] = str(self.df_estoque_all.loc[i, 'Batch status key'])
 
+                    self.d[f]['Batch'][str(self.df_estoque_all.loc[i, 'Batch'])]['Blocked'] = ''
+                    for idx in range(len(self.df_estoque_blocked)):
+                        if self.df_estoque_blocked.loc[idx, 'Material No'] == f and self.df_estoque_blocked.loc[idx, 'Batch'] == self.df_estoque_all.loc[i, 'Batch']:
+                            try:
+                                self.d[f]['Batch'][str(self.df_estoque_all.loc[i, 'Batch'])]['Blocked'] = self.df_estoque_blocked.loc[idx, 'Stock']
+                            except:
+                                ...
+
                     #Expiration date
                     self.d[f]['Batch'][str(self.df_estoque_all.loc[i, 'Batch'])]['Shelf life'] = (self.df_estoque_all.loc[i, 'Expiration date'], self.df_estoque_all.loc[i, 'Expiration date'].strftime('%Y-%m-%d'))
 
@@ -116,6 +124,14 @@ class Medicamentos:
 
                         self.d[f]['batchAbaProdutos'][str(self.df_produtos.loc[i, 'Batch'])]['Plant'] = ''
                         self.d[f]['batchAbaProdutos'][str(self.df_produtos.loc[i, 'Batch'])]['Batch status key'] = ''
+
+                        self.d[f]['batchAbaProdutos'][str(self.df_produtos.loc[i, 'Batch'])]['Blocked'] = ''
+                        for idx in range(len(self.df_estoque_blocked)):
+                            if self.df_estoque_blocked.loc[idx, 'Material No'] == f and self.df_estoque_blocked.loc[idx, 'Batch'] == self.df_produtos.loc[i, 'Batch']:
+                                try:
+                                    self.d[f]['batchAbaProdutos'][str(self.df_produtos.loc[i, 'Batch'])]['Blocked'] = self.df_estoque_blocked.loc[idx, 'Stock']
+                                except:
+                                    ...
 
                         #Expiration date
                         self.d[f]['batchAbaProdutos'][str(self.df_produtos.loc[i, 'Batch'])]['Shelf life'] = (self.df_produtos.loc[i, 'Validade'], self.df_produtos.loc[i, 'Validade'].strftime('%Y-%m-%d'))
@@ -351,6 +367,9 @@ class Medicamentos:
                 limitSalesDate = self.d[key]['Batch'][batchKey].get('Limit sales date')
                 limitSalesDateList.append(limitSalesDate)
 
+                blocked = self.d[key]['Batch'][batchKey].get('Blocked')
+                blockedList.append(blocked)
+
             if self.d[key].get('batchAbaProdutos') != None:
                 for batchKey in list(self.d[key]['batchAbaProdutos']):
 
@@ -377,10 +396,13 @@ class Medicamentos:
                     limitSalesDate = self.d[key]['batchAbaProdutos'][batchKey].get('Limit sales date')
                     limitSalesDateList.append(limitSalesDate)
 
+                    blocked = self.d[key]['batchAbaProdutos'][batchKey].get('Blocked')
+                    blockedList.append(blocked)
+
             lgth = len(batchList)
             productList = [key]*lgth
             descriptionList = [self.d[key].get('Description')]*lgth
-            blockedList = [0]*lgth
+            #blockedList = [0]*lgth
 
             if len(batchList) != len(stockAmountList) and len(batchList) != len(limitSalesDateList):
                 print('FALSE')
@@ -417,7 +439,7 @@ class Medicamentos:
             'BSK': ['']
             }
         df_destruction = pd.DataFrame(data=destruction)
-        destructionTableCols = ['Material No', 'Description', 'Batch', 'Shelf Life', 'Month', 'Plant', 'BSK']
+        destructionTableCols = ['Material No', 'Description', 'Batch', 'Stock Amount', 'Shelf Life', 'Month', 'Plant', 'BSK']
         for i in range(len(df_table)):
             try:
                 if df_table.at[i, 'Month'] >= -6:
