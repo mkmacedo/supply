@@ -4,7 +4,6 @@ from icecream import ic
 import math
 from operator import index
 #from tracemalloc import start
-#from matplotlib.pyplot import axes, axis
 import pandas as pd
 import regexes
 import sys
@@ -38,7 +37,6 @@ class Medicamentos:
         self.d = {}
 
     def calcular(self, month, eInicial=(None, None)):
-        #print(self.df_drp[['*Item', 'SS (min)']])
 
         material = self.df_estoque_all['Material No']
         material = material.unique()
@@ -73,11 +71,8 @@ class Medicamentos:
 
                 if str(self.df_estoque_all.loc[i, 'Material No']) == f:
 
-                    #test[str(self.df_estoque_all.loc[i, 'Material No'])] = self.df_estoque_all.loc[i]
-
                     if self.d[f].get("Description") == None:
                         self.d[f]['Description'] = self.df_estoque_all.loc[i, 'Material Description']
-
 
                     if self.d[f]['Batch'].get(str(self.df_estoque_all.loc[i, 'Batch'])) == None:
                         self.d[f]['Batch'][str(self.df_estoque_all.loc[i, 'Batch'])] = {}
@@ -107,9 +102,6 @@ class Medicamentos:
 
                 if str(self.df_produtos.loc[i, 'Código']) == f:
 
-                    #test[str(self.df_estoque_all.loc[i, 'Material No'])] = self.df_estoque_all.loc[i]
-
-
                     if self.d[f]['Batch'].get(str(self.df_produtos.loc[i, 'Batch'])) == None:
                         if self.d[f].get('batchAbaProdutos') == None:
                             self.d[f]['batchAbaProdutos'] = {}
@@ -121,7 +113,7 @@ class Medicamentos:
                             self.d[f]['batchAbaProdutos'][str(self.df_produtos.loc[i, 'Batch'])]['Stock Amount'] = self.df_produtos.loc[i, 'Amount']
                         else:
                             self.d[f]['batchAbaProdutos'][str(self.df_produtos.loc[i, 'Batch'])]['Stock Amount'] += self.df_produtos.loc[i, 'Amount']
-                        #print(self.df_produtos.loc[i, 'Amount'], self.d[f]['Batch'][str(self.df_produtos.loc[i, 'Batch'])]['Stock Amount'])
+
                         self.d[f]['batchAbaProdutos'][str(self.df_produtos.loc[i, 'Batch'])]['Plant'] = ''
                         self.d[f]['batchAbaProdutos'][str(self.df_produtos.loc[i, 'Batch'])]['Batch status key'] = ''
 
@@ -135,9 +127,6 @@ class Medicamentos:
 
                         limit = self.d[f]['batchAbaProdutos'][str(self.df_produtos.loc[i, 'Batch'])]['Shelf life'][0].date() - timedelta(days=30*12)
                         self.d[f]['batchAbaProdutos'][str(self.df_produtos.loc[i, 'Batch'])]['Limit sales date'] = (limit, limit.strftime('%Y-%m-%d'))
-
-
-
 
 
         df = {} # Chave ==>> Código do Material; Valor ==>> DataFrame
@@ -196,7 +185,6 @@ class Medicamentos:
                 if code in codes:
                     
                     entrada = pd.Series(data=np.zeros((1,len(indexes[beginning:limit])))[0],index=indexes[beginning:limit])
-                    #print(entrada)
 
                     startColumn = None
                     for d in JDA_Cols[15:]:
@@ -217,7 +205,6 @@ class Medicamentos:
                     tempSeries = tempSeries[JDA_Cols[jdaBeginning:jdaLimit]]
 
                     for index, _ in enumerate(entrada):
-                        #print(index,'-', m, '-', list(entrada.index)[index])
                         m = re.search(r'[0-9][0-9]\.[0-9][0-9]\.[0-9][0-9]', str(list(tempSeries.index)[index]))#.group()
                         if m != None:
                             m = m.group().replace(".", "/")
@@ -225,8 +212,7 @@ class Medicamentos:
                             m = dateObj_.strftime("%b %Y").upper()
                             entrada[m] = tempSeries[list(tempSeries.index)[index]]
 
-                    #print(tempSeries)
-                    #print(entrada)
+
                     for index, v in enumerate(df[code]['Entrada']):
 
                         val = str(entrada[list(entrada.index)[index]])
@@ -253,7 +239,7 @@ class Medicamentos:
                         #traceback.print_exc()
                         pass
 
-            #Aqui
+
             for k in range(len(self.df_estoque_blocked)):
                 if self.df_estoque_blocked.loc[k, 'Material No'] == key:
                     try:
@@ -264,9 +250,8 @@ class Medicamentos:
             for k in range(len(self.df_estoque_all)):
                 if key == self.df_estoque_all.loc[k, 'Material No']:
                     #print(self.df_estoque_all.loc[k, 'Stock'])
-
-
                     #print(key)
+
                     for i in range(len(df[key])):
                         
                         if i == 0:# and eInicial[0] == key:
@@ -318,19 +303,17 @@ class Medicamentos:
             
 
 
-            #print(key)
-            #print(df[key])
-            #print(df[key][['Forecast', 'EstoqueInicial', 'CoberturaInicial']])
-            #print(self.d)
             if type(df_provisioning) == type(None):
                 df_provisioning = df[key]
             else:
                 df_provisioning = df_provisioning.append(df[key], ignore_index=True)
 
             df_provisioning.to_excel('planlha_supply2.xlsx')
-        #tables = []
+
+
         df_table = None
         for key in list(self.d.keys()):
+
             #print(key, '--', self.d[key])
             batchList = []
             stockAmountList = []
@@ -342,10 +325,7 @@ class Medicamentos:
             limitSalesDateList = []
             blockedList = []
 
-            #lgth = len(self.d[key].get('Batch'))
-            #if self.d[key].get('batchAbaProdutos') != None:
-            #    lgth += len(self.d[key].get('batchAbaProdutos'))
-            #print(lgth)
+
             for batchKey in list(self.d[key]['Batch']):
 
                 batchList.append(batchKey)
@@ -397,17 +377,10 @@ class Medicamentos:
                     limitSalesDate = self.d[key]['batchAbaProdutos'][batchKey].get('Limit sales date')
                     limitSalesDateList.append(limitSalesDate)
 
-            #print(batchList)
-            #print(stockAmountList)
-            #print(plantList)
-            #print(batchStatusKeyList)
-            #print(daysList)
-            #print(monthsList)
-            #print(limitSalesDateList)
             lgth = len(batchList)
             productList = [key]*lgth
+            descriptionList = [self.d[key].get('Description')]*lgth
             blockedList = [0]*lgth
-            #print(productList)
 
             if len(batchList) != len(stockAmountList) and len(batchList) != len(limitSalesDateList):
                 print('FALSE')
@@ -416,31 +389,46 @@ class Medicamentos:
 
             d = {
                     'Material No': productList,
+                    'Description': descriptionList,
                     'Batch': batchList,
                     'Stock Amount': stockAmountList, 
                     'Shelf Life': shelfLifeList,
                     'Days': daysList,
                     'Month': monthsList,
                     'Limit Sales Date': limitSalesDateList,
+                    'Plant': plantList,
                     'BSK': batchStatusKeyList,
                     'Blocked': blockedList
                     }
-            #df_table = pd.DataFrame(data=d)
-            #tables.append(df_table)
-            #print(df_table[['Batch', 'Days']])
+
             if type(df_table) == type(None):
                 df_table = pd.DataFrame(data=d)
             else:
                 df_table = df_table.append(pd.DataFrame(data=d), ignore_index=True)
 
-    
-        #FN151201
-        #F75D1201
-        #FN131201
 
-        #print(df[key].head())
-        print(df_table)
+        destruction = {
+            'Material No': [''], 
+            'Description': [''], 
+            'Batch': [''], 
+            'Shelf Life': [''], 
+            'Month': [''], 
+            'Plant': [''], 
+            'BSK': ['']
+            }
+        df_destruction = pd.DataFrame(data=destruction)
+        destructionTableCols = ['Material No', 'Description', 'Batch', 'Shelf Life', 'Month', 'Plant', 'BSK']
+        for i in range(len(df_table)):
+            try:
+                if df_table.at[i, 'Month'] >= -6:
+                    print(df_table.at[i, 'Month'])
+                    df_destruction = df_destruction.append(df_table.loc[i], ignore_index=True)
+            except:
+                pass
+        df_destruction = df_destruction[destructionTableCols]
+
         df_table.to_excel('planilha_supply1.xlsx')
+        df_destruction.to_excel('planilha_destruicao.xlsx')
         #print(tables)
         #df_final = tables[0]
         #print(df_final.columns)
