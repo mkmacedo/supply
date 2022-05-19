@@ -9,6 +9,7 @@ import regexes
 import sys
 import numpy as np
 import re
+from ReadSheets import excelIdentifier
 import traceback
 
 
@@ -17,22 +18,89 @@ filenames = sys.stdin.read()
 print(filenames)
 
 sheets = filenames.split('\n')
+sheets.pop()
+print(sheets)
 
 
 class Medicamentos:
     
     def __init__(self, sheets):
+        xlIdentifier = excelIdentifier()
+        self.df_vendas = None
+        self.df_colocado = None
+        self.df_forecast = None
+        self.df_produtos = None
+        self.df_estoque_blocked = None
+        self.df_estoque_all = None
+        self.df_parametros = None
+        self.df_jda = None
+        self.df_drp = None
 
-        self.df_vendas = pd.read_excel(sheets[0].strip())
-        self.df_produtos = pd.read_excel(sheets[1].strip())
-        self.df_estoque_blocked = pd.read_excel(sheets[2].strip())
-        self.df_estoque_all = pd.read_excel(sheets[3].strip())
-        self.df_forecast = pd.read_excel(sheets[4].strip())
-        self.df_colocado = pd.read_excel(sheets[5].strip())
-        self.df_biotech = pd.read_excel(sheets[6].strip())
-        self.df_jda = pd.read_excel(sheets[7].strip())
-        drp = pd.ExcelFile(sheets[6].strip())
-        self.df_drp = pd.read_excel(drp, 'DRP+SS')
+
+        for sheet in sheets:
+
+            xlSheet = xlIdentifier.identifySpreadSheet(sheet.strip())
+
+            if xlSheet == 'vendas':
+                self.df_vendas = pd.read_excel(sheet.strip())
+
+            elif xlSheet == 'colocado':
+                self.df_colocado = pd.read_excel(sheet.strip())
+            
+            elif xlSheet == 'forecast':
+                self.df_forecast = pd.read_excel(sheet.strip())
+            
+            elif xlSheet == 'produtos':
+                self.df_produtos = pd.read_excel(sheet.strip())
+            
+            elif xlSheet == 'bloqueado':
+                temp_df = pd.read_excel(sheet.strip())
+                if type(self.df_estoque_blocked) == type(None):
+                    self.df_estoque_blocked = temp_df
+                elif len(temp_df) <= len(self.df_estoque_blocked):
+                    self.df_estoque_all = self.df_estoque_blocked
+                    self.df_estoque_blocked = temp_df
+                else:
+                    self.df_estoque_all = temp_df
+
+            elif xlSheet == 'all':
+                temp_df = pd.read_excel(sheet.strip())
+                if type(self.df_estoque_all) == type(None):
+                    self.df_estoque_all = temp_df
+                elif len(temp_df) >= len(self.df_estoque_all):
+                    self.df_estoque_blocked = self.df_estoque_all
+                    self.df_estoque_all = temp_df
+                else:
+                    self.df_estoque_blocked = temp_df
+
+            elif xlSheet == 'parametros':
+                self.df_parametros = pd.read_excel(sheet.strip())
+
+            elif xlSheet == 'entrada':
+                self.df_jda = pd.read_excel(sheet.strip())
+
+            elif xlSheet == 'drp':
+                self.df_drp = pd.read_excel(sheet.strip())
+
+            
+
+        #self.df_vendas = pd.read_excel(sheets[0].strip())
+        #self.df_produtos = pd.read_excel(sheets[1].strip())
+        #self.df_estoque_blocked = pd.read_excel(sheets[2].strip())
+        #self.df_estoque_all = pd.read_excel(sheets[3].strip())
+        #self.df_forecast = pd.read_excel(sheets[4].strip())
+        #self.df_colocado = pd.read_excel(sheets[5].strip())
+        #self.df_biotech = pd.read_excel(sheets[6].strip())
+        #self.df_jda = pd.read_excel(sheets[7].strip())
+        #drp = pd.ExcelFile(sheets[6].strip())
+        #self.df_drp = pd.read_excel(drp, 'DRP+SS')
+        #self.df_parametros = pd.read_excel('Parâmetros - Supply Planning Biotech.xlsx')
+        self.params_dict = {}
+        for idx in range(len(self.df_parametros)):
+            self.params_dict[self.df_parametros.at[idx, 'Product Code']] = int(self.df_parametros.at[idx, 'Validade mínima para venda (meses)'])
+            #print(type(self.df_parametros.at[idx, 'Validade mínima para venda (meses)']))
+        #print(self.params_dict)
+
 
         self.d = {}
 
@@ -59,12 +127,12 @@ class Medicamentos:
                 if str(self.df_colocado.loc[i, 'Código']) == f:# and str(self.df_colocado.loc[i, 'Código']).replace('.','').replace(',','').isdigit():
                     self.d[f]['Colocado'] = self.df_colocado.loc[i, 'Colocado']
             
-            for key in list(self.d.keys()):
-                try:
-                    self.d[key]['Delivery'] = self.d[f]['Colocado'] - self.d[f]['Sales']
+            #for key in list(self.d.keys()):
+            try:
+                self.d[f]['Delivery'] = int(self.d[f]['Colocado']) - int(self.d[f]['Sales'])
 
-                except:
-                    pass
+            except:
+                pass
             
             
             for i in range(len(self.df_estoque_all)):
@@ -101,7 +169,7 @@ class Medicamentos:
                     self.d[f]['Batch'][str(self.df_estoque_all.loc[i, 'Batch'])]['Days'] = eval(delta[:delta.find(' days')]) if delta.find(' days') != -1 else eval(delta[:delta.find(' day')]) if delta.find(' day') != -1 else 0
                     self.d[f]['Batch'][str(self.df_estoque_all.loc[i, 'Batch'])]['Month'] = float('{:.1f}'.format(eval(delta[:delta.find(' days')])/30)) if delta.find(' days') != -1 else float('{:.1f}'.format(eval(delta[:delta.find(' day')])/30)) if delta.find(' day') != -1 else 0
 
-                    limit = batchExpDate[0].date() - timedelta(days=30*12)
+                    limit = batchExpDate[0].date() - timedelta(days=30*self.params_dict.get(f, 12))
                     self.d[f]['Batch'][str(self.df_estoque_all.loc[i, 'Batch'])]['Limit sales date'] = (limit, limit.strftime('%Y-%m-%d'))[1] # Tuple Datetime
 
 
@@ -143,7 +211,7 @@ class Medicamentos:
                         self.d[f]['batchAbaProdutos'][str(self.df_produtos.loc[i, 'Batch'])]['Days'] = eval(delta[:delta.find(' days')]) if delta.find(' days') != -1 else eval(delta[:delta.find(' day')]) if delta.find(' day') != -1 else 0
                         self.d[f]['batchAbaProdutos'][str(self.df_produtos.loc[i, 'Batch'])]['Month'] = float('{:.1f}'.format(eval(delta[:delta.find(' days')])/30)) if delta.find(' days') != -1 else float('{:.1f}'.format(eval(delta[:delta.find(' day')])/30)) if delta.find(' day') != -1 else 0
 
-                        limit = batchAbaProdutosExpDate[0].date() - timedelta(days=30*12)
+                        limit = batchAbaProdutosExpDate[0].date() - timedelta(days=30*self.params_dict.get(f, 12))
                         self.d[f]['batchAbaProdutos'][str(self.df_produtos.loc[i, 'Batch'])]['Limit sales date'] = (limit, limit.strftime('%Y-%m-%d'))[1] #Tuple Datetime
 
 
@@ -404,6 +472,9 @@ class Medicamentos:
             lgth = len(batchList)
             productList = [key]*lgth
             descriptionList = [self.d[key].get('Description')]*lgth
+            salesList = [self.d[key].get('Sales')]*lgth
+            deliveryList = [self.d[key].get('Delivery')]*lgth
+            colocadoList = [self.d[key].get('Colocado')]*lgth
             #blockedList = [0]*lgth
 
             if len(batchList) != len(stockAmountList) and len(batchList) != len(limitSalesDateList):
@@ -414,6 +485,9 @@ class Medicamentos:
             d = {
                     'Material No': productList,
                     'Description': descriptionList,
+                    'Sales': salesList,
+                    'Delivery': deliveryList,
+                    'Colocado': colocadoList,
                     'Batch': batchList,
                     'Stock Amount': stockAmountList, 
                     'Shelf Life': shelfLifeList,
@@ -445,7 +519,7 @@ class Medicamentos:
         for i in range(len(df_table)):
             try:
                 if df_table.at[i, 'Month'] >= -6:
-                    print(df_table.at[i, 'Month'])
+                    #print(df_table.at[i, 'Month'])
                     df_destruction = df_destruction.append(df_table.loc[i], ignore_index=True)
             except:
                 pass

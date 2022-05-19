@@ -4,5 +4,6 @@ Lotes estoque (TRANSAÇÃO SAP - bloqueados)(1).xlsx
 Lotes estoque (TRANSAÇÃO SAP - todos os lotes)(1).xlsx
 Aba Forecast (SAP IBP)(1).xlsx
 Aba Colocado (planilha da rede-area de trabalho)(1).xlsx
-Planejamento Biotech + Stilamin(1).xlsx
+Parâmetros - Supply Planning Biotech.xlsx
 Arquivo-JDA_2_.xlsx
+DRP.xlsx

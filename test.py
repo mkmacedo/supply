@@ -1,4 +1,5 @@
 import pandas as pd
+import sys
 
 
 #df = pd.read_excel('Aba Produtos - lotes em trânsito (planilha da rede)(1).xlsx')
@@ -31,3 +32,11 @@ a = ['aewrkjfn'] * 10
 print(a)
 
 print(type(None))
+
+filenames = sys.stdin.read()
+print(filenames)
+
+sheets = filenames.split('\n')
+
+for s in sheets:
+    print(s, '--')

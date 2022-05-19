@@ -33,6 +33,13 @@ class Medicamentos:
         self.df_jda = pd.read_excel(sheets[7].strip())
         drp = pd.ExcelFile(sheets[6].strip())
         self.df_drp = pd.read_excel(drp, 'DRP+SS')
+        self.df_parametros = pd.read_excel('Parâmetros - Supply Planning Biotech.xlsx')
+        self.params_dict = {}
+        for idx in range(len(self.df_parametros)):
+            self.params_dict[self.df_parametros.at[idx, 'Product Code']] = int(self.df_parametros.at[idx, 'Validade mínima para venda (meses)'])
+            #print(type(self.df_parametros.at[idx, 'Validade mínima para venda (meses)']))
+        #print(self.params_dict)
+
 
         self.d = {}
 
@@ -59,12 +66,12 @@ class Medicamentos:
                 if str(self.df_colocado.loc[i, 'Código']) == f:# and str(self.df_colocado.loc[i, 'Código']).replace('.','').replace(',','').isdigit():
                     self.d[f]['Colocado'] = self.df_colocado.loc[i, 'Colocado']
             
-            for key in list(self.d.keys()):
-                try:
-                    self.d[key]['Delivery'] = self.d[f]['Colocado'] - self.d[f]['Sales']
+            #for key in list(self.d.keys()):
+            try:
+                self.d[f]['Delivery'] = int(self.d[f]['Colocado']) - int(self.d[f]['Sales'])
 
-                except:
-                    pass
+            except:
+                pass
             
             
             for i in range(len(self.df_estoque_all)):
@@ -93,15 +100,16 @@ class Medicamentos:
                                 ...
 
                     #Expiration date
-                    self.d[f]['Batch'][str(self.df_estoque_all.loc[i, 'Batch'])]['Shelf life'] = (self.df_estoque_all.loc[i, 'Expiration date'], self.df_estoque_all.loc[i, 'Expiration date'].strftime('%Y-%m-%d'))
+                    batchExpDate = (self.df_estoque_all.loc[i, 'Expiration date'], self.df_estoque_all.loc[i, 'Expiration date'].strftime('%Y-%m-%d'))
+                    self.d[f]['Batch'][str(self.df_estoque_all.loc[i, 'Batch'])]['Shelf life'] = batchExpDate[1] # Tuple Datetime
 
                     #days (timedelta)
-                    delta = str(date.today() - self.d[f]['Batch'][str(self.df_estoque_all.loc[i, 'Batch'])]['Shelf life'][0].date())
+                    delta = str(date.today() - batchExpDate[0].date())
                     self.d[f]['Batch'][str(self.df_estoque_all.loc[i, 'Batch'])]['Days'] = eval(delta[:delta.find(' days')]) if delta.find(' days') != -1 else eval(delta[:delta.find(' day')]) if delta.find(' day') != -1 else 0
                     self.d[f]['Batch'][str(self.df_estoque_all.loc[i, 'Batch'])]['Month'] = float('{:.1f}'.format(eval(delta[:delta.find(' days')])/30)) if delta.find(' days') != -1 else float('{:.1f}'.format(eval(delta[:delta.find(' day')])/30)) if delta.find(' day') != -1 else 0
 
-                    limit = self.d[f]['Batch'][str(self.df_estoque_all.loc[i, 'Batch'])]['Shelf life'][0].date() - timedelta(days=30*12)
-                    self.d[f]['Batch'][str(self.df_estoque_all.loc[i, 'Batch'])]['Limit sales date'] = (limit, limit.strftime('%Y-%m-%d'))
+                    limit = batchExpDate[0].date() - timedelta(days=30*self.params_dict.get(f, 12))
+                    self.d[f]['Batch'][str(self.df_estoque_all.loc[i, 'Batch'])]['Limit sales date'] = (limit, limit.strftime('%Y-%m-%d'))[1] # Tuple Datetime
 
 
 
@@ -134,15 +142,16 @@ class Medicamentos:
                                     ...
 
                         #Expiration date
-                        self.d[f]['batchAbaProdutos'][str(self.df_produtos.loc[i, 'Batch'])]['Shelf life'] = (self.df_produtos.loc[i, 'Validade'], self.df_produtos.loc[i, 'Validade'].strftime('%Y-%m-%d'))
+                        batchAbaProdutosExpDate = (self.df_produtos.loc[i, 'Validade'], self.df_produtos.loc[i, 'Validade'].strftime('%Y-%m-%d')) #Tuple Datetime
+                        self.d[f]['batchAbaProdutos'][str(self.df_produtos.loc[i, 'Batch'])]['Shelf life'] = batchAbaProdutosExpDate[1]
 
                         #days (timedelta)
-                        delta = str(date.today() - self.d[f]['batchAbaProdutos'][str(self.df_produtos.loc[i, 'Batch'])]['Shelf life'][0].date())
+                        delta = str(date.today() - batchAbaProdutosExpDate[0].date())
                         self.d[f]['batchAbaProdutos'][str(self.df_produtos.loc[i, 'Batch'])]['Days'] = eval(delta[:delta.find(' days')]) if delta.find(' days') != -1 else eval(delta[:delta.find(' day')]) if delta.find(' day') != -1 else 0
                         self.d[f]['batchAbaProdutos'][str(self.df_produtos.loc[i, 'Batch'])]['Month'] = float('{:.1f}'.format(eval(delta[:delta.find(' days')])/30)) if delta.find(' days') != -1 else float('{:.1f}'.format(eval(delta[:delta.find(' day')])/30)) if delta.find(' day') != -1 else 0
 
-                        limit = self.d[f]['batchAbaProdutos'][str(self.df_produtos.loc[i, 'Batch'])]['Shelf life'][0].date() - timedelta(days=30*12)
-                        self.d[f]['batchAbaProdutos'][str(self.df_produtos.loc[i, 'Batch'])]['Limit sales date'] = (limit, limit.strftime('%Y-%m-%d'))
+                        limit = batchAbaProdutosExpDate[0].date() - timedelta(days=30*self.params_dict.get(f, 12))
+                        self.d[f]['batchAbaProdutos'][str(self.df_produtos.loc[i, 'Batch'])]['Limit sales date'] = (limit, limit.strftime('%Y-%m-%d'))[1] #Tuple Datetime
 
 
         df = {} # Chave ==>> Código do Material; Valor ==>> DataFrame
@@ -402,6 +411,9 @@ class Medicamentos:
             lgth = len(batchList)
             productList = [key]*lgth
             descriptionList = [self.d[key].get('Description')]*lgth
+            salesList = [self.d[key].get('Sales')]*lgth
+            deliveryList = [self.d[key].get('Delivery')]*lgth
+            colocadoList = [self.d[key].get('Colocado')]*lgth
             #blockedList = [0]*lgth
 
             if len(batchList) != len(stockAmountList) and len(batchList) != len(limitSalesDateList):
@@ -412,6 +424,9 @@ class Medicamentos:
             d = {
                     'Material No': productList,
                     'Description': descriptionList,
+                    'Sales': salesList,
+                    'Delivery': deliveryList,
+                    'Colocado': colocadoList,
                     'Batch': batchList,
                     'Stock Amount': stockAmountList, 
                     'Shelf Life': shelfLifeList,
@@ -443,7 +458,7 @@ class Medicamentos:
         for i in range(len(df_table)):
             try:
                 if df_table.at[i, 'Month'] >= -6:
-                    print(df_table.at[i, 'Month'])
+                    #print(df_table.at[i, 'Month'])
                     df_destruction = df_destruction.append(df_table.loc[i], ignore_index=True)
             except:
                 pass
